@@ -46,7 +46,10 @@ li a:hover:not(.active) {
     padding: 1px 20px;
 }
 
+
+
 /* DASHBOARD */
+
 
 /* Reviews Section */
 
@@ -56,8 +59,30 @@ li a:hover:not(.active) {
     grid-auto-flow: column;
     grid-auto-columns: 25%;
     overflow-x: auto;
+    overscroll-behavior-inline: contain;
 }
 
-.review-card-image {
-    width: 350px;
+.review-card {
+    background-color: beige;
+    border-radius: 5%;
+    border: 1px solid #1a1a1a;
+}
+
+.review-card img {
+    width: 90%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.review-card-title {
+    margin-left: 5%;
+    font-size: 1.25rem;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.review-card-author {
+    margin-left: 5%;
+    font-style: italic;
 }
