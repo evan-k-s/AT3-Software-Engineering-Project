@@ -45,3 +45,19 @@ li a:hover:not(.active) {
     margin-left: 200px;
     padding: 1px 20px;
 }
+
+/* DASHBOARD */
+
+/* Reviews Section */
+
+.h-reviews-scroller {
+    display: grid;
+    gap: 2%;
+    grid-auto-flow: column;
+    grid-auto-columns: 25%;
+    overflow-x: auto;
+}
+
+.review-card-image {
+    width: 350px;
+}
