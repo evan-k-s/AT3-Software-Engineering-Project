@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    padding-bottom: 100px;
 }
 
 ul {
@@ -50,10 +51,13 @@ li a:hover:not(.active) {
 
 /* DASHBOARD */
 
+.dash-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-style: italic;
+}
 
-/* Reviews Section */
-
-.h-reviews-scroller {
+.h-scroller {
     display: grid;
     gap: 2%;
     grid-auto-flow: column;
@@ -62,27 +66,74 @@ li a:hover:not(.active) {
     overscroll-behavior-inline: contain;
 }
 
+/* Reviews Section */
+
 .review-card {
     background-color: beige;
     border-radius: 5%;
     border: 1px solid #1a1a1a;
+    padding-left: 5%;
 }
 
 .review-card img {
     width: 90%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.review-card-title {
-    margin-left: 5%;
-    font-size: 1.25rem;
-    font-weight: bold;
-    font-style: italic;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .review-card-author {
-    margin-left: 5%;
     font-style: italic;
+}
+
+
+
+
+/* Profile Section */
+
+.tag {
+    background-color: rgba(68, 5, 119, 0.5);
+    border: 0.5px solid #44057780;
+    border-radius: 7.5px;
+    color:#fff;
+    display:inline-block;
+    padding-left:16px;
+    padding-right:16px;
+    text-align:center;
+    line-height: 5%;
+    height: 30px;
+}
+
+.profile-dash {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.profile-dash h2 {
+    width: 100%;
+}
+
+.fav-genre {
+    flex: 1;
+    margin-right: 50px;
+}
+
+.fav-era {
+    flex: 1;
+    margin-left: 50px;
+}
+
+.fav-author {
+    width: 100%;
+}
+
+.author-card {
+    background-color: beige;
+    border-radius: 20px;
+    border: 1px solid #1a1a1a;
+    padding: 5%;
+}
+
+.author-card ul {
+    font-size: 0.75rem;
 }
