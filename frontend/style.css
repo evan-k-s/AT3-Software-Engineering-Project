@@ -1,45 +1,48 @@
 body {
     margin: 0;
     padding-bottom: 200px;
+    background-color: #EFEBE6;
+    color: #121212;
 }
 
-ul {
+.navbar ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     width: 200px;
-    background-color: #f1f1f1
+    background-color: #d5c5ae;
 }
 
-li h3 {
+.navbar li h3 {
     padding: 0px 16px;
 }
 
-li a {
+.navbar li a {
     display: block;
     padding: 8px 16px;
     text-decoration: none;
-    color: black;
+    color: #121212;
 }
 
-li a:hover:not(.active) {
-    background-color: #555555;
-    color: white;
+.navbar li a:hover:not(.active) {
+    background-color: #EFEBE6;
+    color: #121212;
 }
 
-.active {
-    background-color: #1a1a1a;
-    color: white;
+.navbar .active {
+    background-color: #671423;
+    color: #EFEBE6;
 }
 
 .navbar {
     position: fixed;
     margin: 0;
     padding: 0;
-    overflow: auto;
+    overflow-x: hidden;
     height: 100%;
     top: 0;
     left: 0;
+    background-color: #d5c5ae;
 }
 
 .content {
@@ -75,13 +78,36 @@ li a:hover:not(.active) {
     max-height: 350px;
 }
 
+.dash-button {
+    padding: 12.5px;
+    border-radius: 10px;
+    background-color: #671423;
+    color: #EFEBE6;
+    text-align: center;
+    border: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    transition: 0.3s ease;
+}
+
+.dash-button:hover {
+    box-shadow: 0 0 5px #671423;
+}
+
 /* Reviews Section */
 
 .review-card {
-    background-color: beige;
+    background-color: #d5c5ae;
     border-radius: 5%;
-    border: 1px solid #1a1a1a;
+    border: 1px solid #121212;
     padding-left: 5%;
+    transition: 0.5s ease;
+}
+
+.review-card:hover {
+    border: 1px solid #671423;
+    box-shadow: 0 0 10px #671423 inset;
 }
 
 .review-card img {
@@ -101,10 +127,10 @@ li a:hover:not(.active) {
 /* Profile Section */
 
 .tag {
-    background-color: rgba(68, 5, 119, 0.5);
-    border: 0.5px solid #44057780;
+    background-color: #47596fBF;
+    border: 0.5px solid #47596f;
     border-radius: 7.5px;
-    color:#fff;
+    color:#EFEBE6;
     display:inline-block;
     padding-left:16px;
     padding-right:16px;
@@ -142,9 +168,9 @@ li a:hover:not(.active) {
 }
 
 .author-card {
-    background-color: beige;
+    background-color: #d5c5ae;
     border-radius: 20px;
-    border: 1px solid #1a1a1a;
+    border: 1px solid #121212;
     padding: 5%;
 }
 
@@ -158,9 +184,9 @@ li a:hover:not(.active) {
 }
 
 .next-read-card {
-    background-color: beige;
+    background-color: #d5c5ae;
     border-radius: 20px;
-    border: 1px solid #1a1a1a;
+    border: 1px solid #121212;
     align-items: center;
     justify-items: center;
 }
