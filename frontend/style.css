@@ -1,8 +1,15 @@
+@font-face {
+  font-family: Old London;
+  src: url("assets/old-london/Old London.ttf");
+}
+
+
 body {
     margin: 0;
     padding-bottom: 200px;
     background-color: #EFEBE6;
     color: #121212;
+    font-family: "Book Antiqua";
 }
 
 .navbar ul {
@@ -48,6 +55,14 @@ body {
 .content {
     margin-left: 200px;
     padding: 1px 20px;
+}
+
+h1 {
+    font-family: Old London;
+    font-size: 3rem;
+    letter-spacing: 0.5rem;
+    font-weight: 550;
+    transform: scaleY(1.2);
 }
 
 
