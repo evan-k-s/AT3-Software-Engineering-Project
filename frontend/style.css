@@ -22,12 +22,18 @@ body {
 
 .navbar li h3 {
     padding: 0px 16px;
+    font-family: Old London;
+    font-size: 1.5rem;
+    letter-spacing: 0.2rem;
+    font-weight: 550;
+    transform: scaleY(1.2);
 }
 
 .navbar li a {
     display: block;
     padding: 8px 16px;
     text-decoration: none;
+    font-size: 0.9rem;
     color: #121212;
 }
 
@@ -50,6 +56,15 @@ body {
     top: 0;
     left: 0;
     background-color: #d5c5ae;
+}
+
+.navbar hr {
+    border: 0;
+    height: 1px;
+    background-color: #671423;
+    width: 90%;
+    margin: auto;
+    margin-bottom: 10px;
 }
 
 .content {
@@ -109,35 +124,6 @@ h1 {
 .dash-button:hover {
     box-shadow: 0 0 5px #671423;
 }
-
-/* Reviews Section */
-
-.review-card {
-    background-color: #d5c5ae;
-    border-radius: 5%;
-    border: 1px solid #121212;
-    padding-left: 5%;
-    transition: 0.5s ease;
-}
-
-.review-card:hover {
-    border: 1px solid #671423;
-    box-shadow: 0 0 10px #671423 inset;
-}
-
-.review-card img {
-    width: 90%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.review-card-author {
-    font-style: italic;
-}
-
-
-
 
 /* Profile Section */
 
@@ -211,4 +197,39 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+
+
+/* REVIEWS */
+
+.reviews-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 5rem 0;
+    grid-gap: 2rem;
+}
+
+.review-card {
+    background-color: #d5c5ae;
+    border-radius: 5%;
+    border: 1px solid #121212;
+    padding-left: 5%;
+    transition: 0.5s ease;
+}
+
+.review-card:hover {
+    border: 1px solid #671423;
+    box-shadow: 0 0 10px #671423 inset;
+}
+
+.review-card img {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.review-card-author {
+    font-style: italic;
 }
