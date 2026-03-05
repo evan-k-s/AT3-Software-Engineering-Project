@@ -20,6 +20,21 @@
         <div class="content">
             <h1>-Recommendations-</h1>
             <button type="button" class="dash-button">Generate New Recommendations</button>
+            <div class="recs-filters">
+                <div class="genre-select" id="genre-select">
+                    <div class="selected-genres" id="selectedGenres">
+                        <div class="dropdown-arrow" id="dropdown-arrow">&#9662; Filter Genres</div>
+                        <div class="dropdown" id="dropdown">
+                            <div data-value="scifi">Sci-Fi</div>
+                            <div data-value="fantasy">Fantasy</div>
+                            <div data-value="historical">Historical</div>
+                            <div data-value="romance">Romance</div>
+                            <div data-value="crime">Crime</div>
+                            <div data-value="nonfiction">Non-Fiction</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="recs-container">
                 <div class="recs-wrapper">
                     <div class="rec-card">
@@ -73,5 +88,8 @@
                 </div>
             </div>
         </div>
+
+        <script src="filters.js" defer></script>
+
     </body>
 </html>
