@@ -266,3 +266,63 @@ h1 {
 .delete-button:hover {
     box-shadow: 0 0 5px #671423;
 }
+
+
+
+/* RECOMMENDATIONS */
+
+.recs-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 5rem 0;
+    grid-gap: 2rem;
+}
+
+.rec-card {
+    background-color: #d5c5ae;
+    border-radius: 5%;
+    border: 1px solid #121212;
+    padding-left: 5%;
+    padding-right: 5%;
+    transition: 0.5s ease;
+}
+
+.rec-card:hover {
+    border: 1px solid #671423;
+    box-shadow: 0 0 10px #671423 inset;
+}
+
+.rec-card img {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rec-card-author {
+    font-style: italic;
+}
+
+.rec-card-summary {
+    font-size: 0.75rem;
+    word-wrap: normal;
+    text-align: justify;
+}
+
+
+.save-button {
+    padding: 12.5px;
+    border-radius: 10px;
+    background-color: #671423;
+    color: #EFEBE6;
+    text-align: center;
+    border: none;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    transition: 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.save-button:hover {
+    box-shadow: 0 0 5px #671423;
+}
