@@ -21,17 +21,41 @@
             <h1>-Recommendations-</h1>
             <button type="button" class="dash-button">Generate New Recommendations</button>
             <div class="recs-filters">
-                <div class="genre-select" id="genre-select">
-                    <div class="selected-genres" id="selectedGenres">
-                        <div class="dropdown-arrow" id="dropdown-arrow">&#9662; Filter Genres</div>
-                        <div class="dropdown" id="dropdown">
-                            <div data-value="scifi">Sci-Fi</div>
-                            <div data-value="fantasy">Fantasy</div>
-                            <div data-value="historical">Historical</div>
-                            <div data-value="romance">Romance</div>
-                            <div data-value="crime">Crime</div>
-                            <div data-value="nonfiction">Non-Fiction</div>
+                <div class="genres"> 
+                    <p>Genre Filter</p>
+                    <div class="genre-select" id="genre-select">
+                        <div class="selected-genres" id="selectedGenres">
+                            <div class="dropdown-arrow" id="dropdown-arrow">&#9662; Filter Genres</div>
+                            <div class="dropdown" id="dropdown">
+                                <div data-value="scifi">Sci-Fi</div>
+                                <div data-value="fantasy">Fantasy</div>
+                                <div data-value="historical">Historical</div>
+                                <div data-value="romance">Romance</div>
+                                <div data-value="crime">Crime</div>
+                                <div data-value="nonfiction">Non-Fiction</div>
+                            </div>
                         </div>
+                    </div>
+                </div>
+                <div class="era-select">
+                    <p>Era Range Filter</p>
+                    <div class="fields">
+                        <div class="field">
+                            <span>Min</span>
+                            <input type="number" class="era-min" value="1950">
+                        </div>
+                        <div class="separator">-</div>
+                        <div class="field">
+                            <span>Max</span>
+                            <input type="number" class="era-max" value="2010">
+                        </div>
+                    </div>
+                    <div class="slider">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="range-input">
+                        <input type="range" class="range-min" min="1425" max="2025" value="1950">
+                        <input type="range" class="range-max" min="1425" max="2025" value="2010">
                     </div>
                 </div>
             </div>

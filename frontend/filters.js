@@ -36,3 +36,30 @@ selectedGenres.addEventListener('click', (e) => {
         e.target.parentElement.remove();
     }
 })
+
+
+let eraGap = 1;
+
+const rangeInput = document.querySelectorAll(".range-input input"),
+eraInput = document.querySelectorAll(".fields input"),
+progress = document.querySelector(".slider .progress");
+
+rangeInput.forEach(input => {
+    input.addEventListener("input", (e) => {
+        let minVal = parseInt(rangeInput[0].value),
+        maxVal = parseInt(rangeInput[1].value);
+
+        if (maxVal - minVal < eraGap) {
+            if (e.target.className == "range-min") {
+                rangeInput[0].value = maxVal - eraGap;
+            } else {
+                rangeInput[1].value = minVal + eraGap;
+            }
+        } else {
+            eraInput[0].value = minVal;
+            eraInput[1].value = maxVal;
+            progress.style.left = ((minVal - rangeInput[0].min) / (rangeInput[0].max - rangeInput[0].min)) * 100 + "%";
+            progress.style.right = 100 - ((maxVal - rangeInput[1].min) / (rangeInput[1].max - rangeInput[1].min)) * 100 + "%";
+        };
+    });
+});

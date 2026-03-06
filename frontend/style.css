@@ -329,14 +329,22 @@ h1 {
 
 .recs-filters {
     margin-top: 20px;
-    width: 370px;
+    width: 550px;
+    height: auto;
     background-color: #d5c5ae;
     padding: 20px;
+    padding-top: 10px;
     border-radius: 10px;
     box-shadow: 2px 2px 10px #d5c5ae;
+    display: flex;
 }
 
 /* Genre Filters */
+
+.genres {
+    display: relative;
+    width: 80%;
+}
 
 .genre-select {
     width: 80%;
@@ -346,6 +354,7 @@ h1 {
     background: #d5c5ae;
     position: relative;
     cursor: pointer;
+    height: fit-content;
 }
 
 .genre-select.open .dropdown {
@@ -406,4 +415,97 @@ h1 {
 
 .selected-genres span i {
     cursor: pointer;
+}
+
+/* Era Filters */
+
+.era-select {
+    width: 100%;
+    display: relative;
+    margin-left: 30px;
+}
+
+.era-select .fields {
+    display: flex;
+}
+
+.era-select .field {
+    height: 25px;
+    width: 120px;
+    display: flex;
+    align-items: center;
+}
+
+.field input {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    font-size: 15px;
+    text-align: center;
+    margin-left: 12px;
+    border-radius: 5px;
+    background: #EFEBE6;
+    border: 1px solid #671423;
+    appearance: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.fields .separator {
+    width: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider {
+    margin-top: 20px;
+    height: 5px;
+    border-radius: 5px;
+    background: #EFEBE6;
+    position: relative;
+}
+
+.slider .progress {
+    height: 5px;
+    left: 87.5%;
+    right: 2.5%;
+    position: absolute;
+    border-radius: 5px;
+    background: #671423;
+}
+
+.range-input {
+    position: relative;
+}
+
+.range-input input {
+    position: absolute;
+    top: -6px;
+    height: 5px;
+    width: 100%;
+    background: none;
+    pointer-events: none;
+    appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    height: 17px;
+    width: 17px;
+    appearance: none;
+    pointer-events: auto;
+    background: #671423;
+    border-radius: 50%;
+}
+
+input[type="range"]::-moz-slider-thumb {
+    height: 17px;
+    width: 17px;
+    appearance: none;
+    pointer-events: auto;
+    background: #671423;
+    border-radius: 50%;
 }
