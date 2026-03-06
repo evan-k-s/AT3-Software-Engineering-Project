@@ -3,12 +3,27 @@
   src: url("assets/old-london/Old London.ttf");
 }
 
+:root {
+    --background-colour: #EFEBE6;
+    --secondary-background: #d5c5ae;
+    --accent-colour: #671423;
+    --primary-text: #121212;
+    --secondary-accent: #47596fBF;
+}
+
+.darkmode {
+    --background-colour: #121212;
+    --secondary-background: #333333;
+    --accent-colour: #DAA12F;
+    --primary-text: #EFEBE6;
+    --secondary-accent: #5F7895;
+}
 
 body {
     margin: 0;
     padding-bottom: 200px;
-    background-color: #EFEBE6;
-    color: #121212;
+    background-color: var(--background-colour);
+    color: var(--primary-text);
     font-family: "Book Antiqua";
 }
 
@@ -17,7 +32,7 @@ body {
     margin: 0;
     padding: 0;
     width: 200px;
-    background-color: #d5c5ae;
+    background-color: var(--secondary-background);
 }
 
 .navbar li h3 {
@@ -34,17 +49,17 @@ body {
     padding: 8px 16px;
     text-decoration: none;
     font-size: 0.9rem;
-    color: #121212;
+    color: var(--primary-text);
 }
 
 .navbar li a:hover:not(.active) {
-    background-color: #EFEBE6;
-    color: #121212;
+    background-color: var(--background-colour);
+    color: var(--primary-text);
 }
 
 .navbar .active {
-    background-color: #671423;
-    color: #EFEBE6;
+    background-color: var(--accent-colour);
+    color: var(--background-colour);
 }
 
 .navbar {
@@ -55,13 +70,13 @@ body {
     height: 100%;
     top: 0;
     left: 0;
-    background-color: #d5c5ae;
+    background-color: var(--secondary-background);
 }
 
 .navbar hr {
     border: 0;
     height: 1px;
-    background-color: #671423;
+    background-color: var(--accent-colour);
     width: 90%;
     margin: auto;
     margin-bottom: 10px;
@@ -78,6 +93,37 @@ h1 {
     letter-spacing: 0.5rem;
     font-weight: 550;
     transform: scaleY(1.2);
+}
+
+.theme-switch {
+    height: 50px;
+    width: 50px;
+    padding: 0;
+    position: fixed;
+    border-radius: 50%;
+    background-color: var(--secondary-background);
+    color: var(--accent-colour);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 30px;
+    right: 30px;
+}
+
+.theme-switch svg:first-child {
+    display: none;
+}
+
+.darkmode .theme-switch svg:last-child {
+    display: none;
+}
+
+.theme-switch svg:last-child {
+    display: block;
+}
+
+.darkmode .theme-switch svg:first-child {
+    display: block;
 }
 
 
@@ -111,8 +157,8 @@ h1 {
 .dash-button {
     padding: 12.5px;
     border-radius: 10px;
-    background-color: #671423;
-    color: #EFEBE6;
+    background-color: var(--accent-colour);
+    color: var(--background-colour);
     text-align: center;
     border: none;
     text-transform: uppercase;
@@ -122,16 +168,16 @@ h1 {
 }
 
 .dash-button:hover {
-    box-shadow: 0 0 5px #671423;
+    box-shadow: 0 0 5px var(--accent-colour);
 }
 
 /* Profile Section */
 
 .tag {
-    background-color: #47596fBF;
-    border: 0.5px solid #47596f;
+    background-color: var(--secondary-accent);
+    border: 0.5px solid var(--secondary-accent);
     border-radius: 7.5px;
-    color:#EFEBE6;
+    color:var(--background-colour);
     display:inline-block;
     padding-left:16px;
     padding-right:16px;
@@ -169,9 +215,9 @@ h1 {
 }
 
 .author-card {
-    background-color: #d5c5ae;
+    background-color: var(--secondary-background);
     border-radius: 20px;
-    border: 1px solid #121212;
+    border: 1px solid var(--primary-text);
     padding: 5%;
 }
 
@@ -185,9 +231,9 @@ h1 {
 }
 
 .next-read-card {
-    background-color: #d5c5ae;
+    background-color: var(--secondary-background);
     border-radius: 20px;
-    border: 1px solid #121212;
+    border: 1px solid var(--primary-text);
     align-items: center;
     justify-items: center;
 }
@@ -211,16 +257,16 @@ h1 {
 }
 
 .review-card {
-    background-color: #d5c5ae;
+    background-color: var(--secondary-background);
     border-radius: 5%;
-    border: 1px solid #121212;
+    border: 1px solid var(--primary-text);
     padding-left: 5%;
     transition: 0.5s ease;
 }
 
 .review-card:hover {
-    border: 1px solid #671423;
-    box-shadow: 0 0 10px #671423 inset;
+    border: 1px solid var(--accent-colour);
+    box-shadow: 0 0 10px var(--accent-colour) inset;
 }
 
 .review-card img {
@@ -237,8 +283,8 @@ h1 {
 .edit-button {
     padding: 12.5px;
     border-radius: 10px;
-    background-color: #671423;
-    color: #EFEBE6;
+    background-color: var(--accent-colour);
+    color: var(--background-colour);
     text-align: center;
     border: none;
     font-weight: bold;
@@ -247,14 +293,14 @@ h1 {
 }
 
 .edit-button:hover {
-    box-shadow: 0 0 5px #671423;
+    box-shadow: 0 0 5px var(--accent-colour);
 }
 
 .delete-button {
     padding: 12.5px;
     border-radius: 10px;
-    background-color: #EFEBE6;
-    color: #671423;
+    background-color: var(--background-colour);
+    color: var(--accent-colour);
     text-align: center;
     border: none;
     font-weight: bold;
@@ -264,7 +310,7 @@ h1 {
 }
 
 .delete-button:hover {
-    box-shadow: 0 0 5px #671423;
+    box-shadow: 0 0 5px var(--accent-colour);
 }
 
 
@@ -279,17 +325,17 @@ h1 {
 }
 
 .rec-card {
-    background-color: #d5c5ae;
+    background-color: var(--secondary-background);
     border-radius: 5%;
-    border: 1px solid #121212;
+    border: 1px solid var(--primary-text);
     padding-left: 5%;
     padding-right: 5%;
     transition: 0.5s ease;
 }
 
 .rec-card:hover {
-    border: 1px solid #671423;
-    box-shadow: 0 0 10px #671423 inset;
+    border: 1px solid var(--accent-colour);
+    box-shadow: 0 0 10px var(--accent-colour) inset;
 }
 
 .rec-card img {
@@ -313,8 +359,8 @@ h1 {
 .save-button {
     padding: 12.5px;
     border-radius: 10px;
-    background-color: #671423;
-    color: #EFEBE6;
+    background-color: var(--accent-colour);
+    color: var(--background-colour);
     text-align: center;
     border: none;
     font-weight: bold;
@@ -324,18 +370,18 @@ h1 {
 }
 
 .save-button:hover {
-    box-shadow: 0 0 5px #671423;
+    box-shadow: 0 0 5px var(--accent-colour);
 }
 
 .recs-filters {
     margin-top: 20px;
     width: 550px;
     height: auto;
-    background-color: #d5c5ae;
+    background-color: var(--secondary-background);
     padding: 20px;
     padding-top: 10px;
     border-radius: 10px;
-    box-shadow: 2px 2px 10px #d5c5ae;
+    box-shadow: 2px 2px 10px var(--secondary-background);
     display: flex;
 }
 
@@ -348,10 +394,10 @@ h1 {
 
 .genre-select {
     width: 80%;
-    border: 1px solid #671423;
+    border: 1px solid var(--accent-colour);
     border-radius: 6px;
     padding: 10px 40px 10px 10px;
-    background: #d5c5ae;
+    background: var(--secondary-background);
     position: relative;
     cursor: pointer;
     height: fit-content;
@@ -367,8 +413,8 @@ h1 {
     top: 100%;
     left: 0;
     right: 0;
-    background: #d5c5ae;
-    border: 1px solid #671423;
+    background: var(--secondary-background);
+    border: 1px solid var(--accent-colour);
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
     max-height: 150px;
@@ -377,17 +423,17 @@ h1 {
 }
 
 .dropdown div {
-    border-top: 1px solid #671423;
+    border-top: 1px solid var(--accent-colour);
     padding-top: 10px;
     padding-bottom: 10px;
 }
 
 .dropdown div:last-child {
-    border-bottom: 1px solid #671423;
+    border-bottom: 1px solid var(--accent-colour);
 }
 
 .dropdown div:hover {
-    background: #EFEBE6;
+    background: var(--background-colour);
 }
 
 .dropdown-arrow {
@@ -403,9 +449,9 @@ h1 {
 }
 
 .selected-genres span {
-    background: #EFEBE6;
+    background: var(--background-colour);
     padding: 5px 10px;
-    border: 1px solid #671423;
+    border: 1px solid var(--accent-colour);
     border-radius: 5px;
     font-size: 14px;
     display: flex;
@@ -444,9 +490,10 @@ h1 {
     text-align: center;
     margin-left: 12px;
     border-radius: 5px;
-    background: #EFEBE6;
-    border: 1px solid #671423;
+    background: var(--background-colour);
+    border: 1px solid var(--accent-colour);
     appearance: none;
+    color: var(--primary-text);
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -465,7 +512,7 @@ input[type="number"]::-webkit-inner-spin-button {
     margin-top: 20px;
     height: 5px;
     border-radius: 5px;
-    background: #EFEBE6;
+    background: var(--background-colour);
     position: relative;
 }
 
@@ -475,7 +522,7 @@ input[type="number"]::-webkit-inner-spin-button {
     right: 2.5%;
     position: absolute;
     border-radius: 5px;
-    background: #671423;
+    background: var(--accent-colour);
 }
 
 .range-input {
@@ -497,7 +544,7 @@ input[type="range"]::-webkit-slider-thumb {
     width: 17px;
     appearance: none;
     pointer-events: auto;
-    background: #671423;
+    background: var(--accent-colour);
     border-radius: 50%;
 }
 
@@ -506,6 +553,6 @@ input[type="range"]::-moz-slider-thumb {
     width: 17px;
     appearance: none;
     pointer-events: auto;
-    background: #671423;
+    background: var(--accent-colour);
     border-radius: 50%;
 }
