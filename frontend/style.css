@@ -100,6 +100,7 @@ h1 {
     width: 50px;
     padding: 0;
     position: absolute;
+    border: 1px solid var(--accent-colour);
     border-radius: 50%;
     background-color: var(--secondary-background);
     color: var(--accent-colour);
@@ -555,4 +556,42 @@ input[type="range"]::-moz-slider-thumb {
     pointer-events: auto;
     background: var(--accent-colour);
     border-radius: 50%;
+}
+
+
+
+/* LOGIN PAGE */
+
+.centre {
+    text-align: center;
+}
+
+.login-form {
+    background-color: var(--secondary-background);
+    border: 1px solid var(--accent-colour);
+    width: 30%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.login-field {
+    margin-bottom: 40px;
+}
+
+.field-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-style: italic;
+    margin-bottom: 5px;
+}
+
+.login-field input {
+    width: 90%;
+    padding: 8px;
+    appearance: none;
+    background-color: var(--background-colour);
+    border: none;
+    border-radius: 5px;
+    text-align: center;
 }
