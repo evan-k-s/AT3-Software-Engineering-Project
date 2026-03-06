@@ -99,7 +99,7 @@ h1 {
     height: 50px;
     width: 50px;
     padding: 0;
-    position: fixed;
+    position: absolute;
     border-radius: 50%;
     background-color: var(--secondary-background);
     color: var(--accent-colour);
