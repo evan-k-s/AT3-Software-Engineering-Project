@@ -95,11 +95,22 @@ h1 {
     transform: scaleY(1.2);
 }
 
+a {
+    color: var(--accent-colour);
+    text-decoration: none;
+    font-style: oblique;
+}
+
+a:hover {
+    text-decoration: underline wavy;
+}
+
 .theme-switch {
     height: 50px;
     width: 50px;
     padding: 0;
     position: absolute;
+    border: 1px solid var(--accent-colour);
     border-radius: 50%;
     background-color: var(--secondary-background);
     color: var(--accent-colour);
@@ -555,4 +566,74 @@ input[type="range"]::-moz-slider-thumb {
     pointer-events: auto;
     background: var(--accent-colour);
     border-radius: 50%;
+}
+
+
+
+/* LOGIN / REGISTER PAGE */
+
+.centre {
+    text-align: center;
+}
+
+.auth-form {
+    background-color: var(--secondary-background);
+    border: 1px solid var(--accent-colour);
+    width: 30%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.auth-field {
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.field-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-style: italic;
+    margin-bottom: 5px;
+}
+
+.auth-field input {
+    width: 90%;
+    padding: 8px;
+    appearance: none;
+    background-color: var(--background-colour);
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.pass-vis {
+    height: 20px;
+    width: 20px;
+    padding: 0;
+    position: absolute;
+    border: none;
+    display: flex;
+    color: var(--primary-text);
+    justify-content: center;
+    align-items: center;
+    right: 20px;
+    top: 38px;
+    background: none;
+}
+
+.pass-vis:not(.visible) svg:last-child {
+    display: none;
+}
+
+.pass-vis.visible svg:first-child {
+    display: none;
+}
+
+.pass-vis:not(.visible) svg:first-child {
+    display: block;
+}
+
+.pass-vis.visible svg:last-child {
+    display: block;
 }
