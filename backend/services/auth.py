@@ -5,7 +5,7 @@ from datetime import datetime
 import re
 import html
 
-def login_user(username, password):
+def auth_login_user(username, password):
     user = User.query.filter_by(username=username).first()
 
     if not user or not user.verify_password(password):
@@ -13,11 +13,10 @@ def login_user(username, password):
     
     session_token, csrf_token = user.initiate_user_session()
 
-    return session_token, csrf_token
+    return session_token, csrf_token, user
 
 
-def register_user(username, email, password):
-    
+def auth_register_user(username, email, password):
 
     email = str(email).strip()
     valid_email = bool(re.match("^([^.@ ]+(?:.[^.@ ]+)@[^.@ ]+\.[^.@ ]+[\.\w]+).{1,}$", email))
@@ -73,3 +72,9 @@ def register_user(username, email, password):
     new_user_instance.save_to_db()
 
     return session_token, csrf_token
+
+def auth_logout_user(session_token):
+    user = User.query.filter_by(session_token=session_token).first()
+
+    if user:
+        user.revoke_user_session()
