@@ -93,7 +93,7 @@ def login():
             msg = "Missing required fields: username and password"
             raise AccessError("Missing required fields: username and password")
     
-    return render_template('login.html', msg)
+    return render_template('login.html', msg=msg)
 
 
 @app.route('/register', methods=['GET', 'POST'])
