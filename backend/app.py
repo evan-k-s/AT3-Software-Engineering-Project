@@ -71,12 +71,12 @@ def saved_recommendations():
 @catch_errors
 def login():
     msg = ""
-    data = request.form
 
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
 
     if request.method == 'POST':
+        data = request.get_json()
         if "username" in data and "password" in data:
             username = data["username"]
             password = data["password"]
@@ -88,7 +88,7 @@ def login():
             
             login_user(user, remember=remember)
 
-            return redirect(url_for('dashboard'))
+            return response, 200
         else:
             msg = "Missing required fields: username and password"
             raise AccessError("Missing required fields: username and password")
