@@ -29,3 +29,23 @@ export const authRegister = async (email, password, username) => {
 
     return response;
 };
+
+export const authLogout = async () => {
+    const tokens = {
+        sessionToken: sessionStorage.getItem("session_token"),
+        csrfToken: sessionStorage.getItem("csrf_token"),
+    }
+    const ownerUsername = sessionStorage.getItem("owner");
+
+    if (!tokens || !ownerUsername) {
+        throw new Error("Cannot logout: no tokens or username not found");
+    }
+
+    const response = await requestBackend("POST", "logout", tokens, null, null);
+    if (response.error) {
+        throw new Error(response.error)
+    }
+
+    sessionStorage.removeItem("session_token");
+    sessionStorage.removeItem("owner");
+}

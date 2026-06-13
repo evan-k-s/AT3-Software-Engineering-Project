@@ -122,13 +122,13 @@ def register():
     return render_template('register.html', msg=msg)
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 @catch_errors
 @login_required
 def logout():
     auth_logout_user(current_user.session_token)
     logout_user()
-    return redirect(url_for('login'))
+    return {}, 200
 
 
 @login_manager.user_loader
