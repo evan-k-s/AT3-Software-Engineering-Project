@@ -55,6 +55,12 @@ def dashboard():
 def reviews():
     return render_template('reviews.html', user=current_user)
 
+@app.route('/create-review')
+@catch_errors
+@login_required
+def create_reviews():
+    return render_template('create_review.html', user=current_user)
+
 @app.route('/recommendations')
 @catch_errors
 @login_required
