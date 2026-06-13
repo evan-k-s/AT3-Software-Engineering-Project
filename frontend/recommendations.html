@@ -16,7 +16,7 @@
                 <li><a href="{{ url_for('reviews') }}">My Reviews</a></li>
                 <li><a class="active" href="#">Book Recommendations</a></li>
                 <li><a href="{{ url_for('saved_recommendations') }}">Saved Recommendations</a></li>
-                <li><a class="logout-button" href="{{ url_for('logout') }}">Logout</a></li>
+                <li><a class="logout-button" href="#" id="logout">Logout</a></li>
             </ul>
         </div>
         <div class="content">
@@ -121,6 +121,7 @@
 
         <script src="filters.js" defer></script>
         <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='src/services/logout.js') }}" defer></script>
 
     </body>
 </html>
