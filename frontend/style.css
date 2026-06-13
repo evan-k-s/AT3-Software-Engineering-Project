@@ -82,6 +82,15 @@ body {
     margin-bottom: 10px;
 }
 
+.navbar .logout-button {
+    color: var(--accent-colour);
+    border: 1px solid var(--accent-colour);
+    border-radius: 5px;
+    margin: 10px;
+    font-style: normal;
+    text-transform: uppercase;
+}
+
 .content {
     margin-left: 200px;
     padding: 1px 20px;
@@ -576,6 +585,15 @@ input[type="range"]::-moz-slider-thumb {
     text-align: center;
 }
 
+.auth-form .message {
+    background-color: var(--accent-colour);
+    color: var(--background-colour);
+    margin: 10px;
+    margin-left: 30px;
+    margin-right: 30px;
+    border-radius: 5px;
+}
+
 .auth-form {
     background-color: var(--secondary-background);
     border: 1px solid var(--accent-colour);
@@ -602,9 +620,37 @@ input[type="range"]::-moz-slider-thumb {
     padding: 8px;
     appearance: none;
     background-color: var(--background-colour);
+    color: var(--primary-text);
     border: none;
     border-radius: 5px;
     text-align: center;
+}
+
+.auth-field input[type="checkbox"] {
+    appearance: none;
+    background-color: var(--background-colour);
+    margin: 10px;
+    width: 1.5em;
+    height: 1.5em;
+    border: 0.15em solid var(--primary-text);
+    border-radius: 0.15em;
+    transform: translateY(-0.075em);
+    display: inline-grid;
+    place-content: center;
+    justify-self: center;
+}
+
+.auth-field input[type="checkbox"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--accent-colour);
+}
+
+.auth-field input[type="checkbox"]:checked::before {
+    transform: scale(1);
 }
 
 .pass-vis {

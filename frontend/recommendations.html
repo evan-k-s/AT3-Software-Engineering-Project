@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
         <title>Book Reviewing Site</title>
     </head>
@@ -12,10 +12,12 @@
             <ul>
                 <li><h3>Navigation Bar</h3></li>
                 <hr>
-                <li><a href="index.html">Dashboard</a></li>
-                <li><a href="reviews.html">My Reviews</a></li>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('reviews') }}">My Reviews</a></li>
                 <li><a class="active" href="#">Book Recommendations</a></li>
-                <li><a href="saved_recommendations.html">Saved Recommendations</a></li>
+                <li><a href="{{ url_for('saved_recommendations') }}">Saved Recommendations</a></li>
+                <li><a class="logout-button" href="#" id="logout">Logout</a></li>
+            </ul>
         </div>
         <div class="content">
             <h1>-Recommendations-</h1>
@@ -118,7 +120,8 @@
         </div>
 
         <script src="filters.js" defer></script>
-        <script src="darkmode.js" defer></script>
+        <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='src/services/logout.js') }}" defer></script>
 
     </body>
 </html>
