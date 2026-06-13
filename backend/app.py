@@ -100,23 +100,22 @@ def login():
 @catch_errors
 def register():
     msg = ""
-    data = request.form
 
     if request.method == 'POST':
-        if "username" in data and "email" in data and "password" in data and "confirm-password" in data:
+        data = request.get_json()
+        if "username" in data and "email" in data and "password" in data:
             email = data["email"]
             username = data["username"]
             password = data["password"]
-            confirm_password = data["confirm-password"]
 
-            if password == confirm_password:
-                session_token, csrf_token = auth_register_user(username, email, password)
-                response = jsonify({"session_token": session_token, "csrf_token": csrf_token})
-                response.set_cookie("session_token", session_token, httponly=True, samesite="Lax", secure=True)
 
-                return redirect(url_for('login'))
-            else:
-                msg = "Confirmed password does not match!"
+            session_token, csrf_token = auth_register_user(username, email, password)
+            response = jsonify({"session_token": session_token, "csrf_token": csrf_token})
+            response.set_cookie("session_token", session_token, httponly=True, samesite="Lax", secure=True)
+
+            flash("Successfully registered! Please login.")
+
+            return response, 200
         else:
             msg = "Missing required fields: email, username, and password"
             raise InputError("Missing required fields: email, username, and password")

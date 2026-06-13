@@ -16,7 +16,16 @@
             </button>
             <div class="auth-form">
                 <form id="login-form" method="POST">
-                    <div class="message">{{ msg }}</div>
+                    <div class="message">
+                        {{ msg }}
+                        {% with messages = get_flashed_messages()%}
+                        {% if messages%}
+                            {% for message in messages%}
+                            <p>{{ message }}</p>
+                            {%endfor%}
+                        {%endif%}
+                        {%endwith%}
+                    </div>
 
                     <div class="auth-field">
                         <p class="field-title">Username:</p>
@@ -54,6 +63,7 @@
                     await authLogin(username, password);
                     window.location.href = "/";
                 } catch (error) {
+                    alert("Incorrect credentials!")
                     console.error("Failed: ", error);
                 }
             });

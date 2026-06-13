@@ -32,7 +32,6 @@ export const requestBackend = async (method, route, tokens, payload, query) => {
         }
         return response.json()
     } catch (error) {
-        alert("Incorrect credentials!");
         console.error("Error", error);
         throw new Error(error.message);
     }

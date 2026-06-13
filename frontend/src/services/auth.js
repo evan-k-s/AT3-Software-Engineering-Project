@@ -13,4 +13,19 @@ export const authLogin = async (username, password) => {
     sessionStorage.setItem("owner", username);
 
     return response;
-}
+};
+
+
+export const authRegister = async (email, password, username) => {
+    const body = { email, password, username };
+    const response = await requestBackend("POST", "register", null, body, null);
+
+    if (response.error) {
+        throw new Error(response.error);
+    }
+    sessionStorage.setItem("session_token", response.session_token);
+    sessionStorage.setItem("csrf_token", response.csrf_token);
+    sessionStorage.setItem("owner", username);
+
+    return response;
+};
