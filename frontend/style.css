@@ -91,6 +91,15 @@ body {
     text-transform: uppercase;
 }
 
+.navbar .back-button {
+    color: var(--primary-text);
+    border: 1px solid var(--accent-colour);
+    border-radius: 5px;
+    margin: 10px;
+    font-style: normal;
+    background-color: var(--background-colour);
+}
+
 .content {
     margin-left: 200px;
     padding: 1px 20px;
@@ -185,6 +194,7 @@ a:hover {
     font-weight: bold;
     letter-spacing: 0.1em;
     transition: 0.3s ease;
+    cursor: pointer;
 }
 
 .dash-button:hover {
@@ -331,6 +341,66 @@ a:hover {
 
 .delete-button:hover {
     box-shadow: 0 0 5px var(--accent-colour);
+}
+
+.review-form {
+    background-color: var(--secondary-background);
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.paragraph-input {
+    width: 90%;
+    resize: vertical;
+    appearance: none;
+    padding: 8px;
+    background-color: var(--background-colour);
+    color: var(--primary-text);
+    border: none;
+    border-radius: 5px;
+    font: inherit;
+}
+
+.title-input {
+    width: 90%;
+    padding: 8px;
+    appearance: none;
+    background-color: var(--background-colour);
+    color: var(--primary-text);
+    border: none;
+    border-radius: 5px;
+    text-align: left;
+    font: inherit;
+}
+
+.review-field {
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: 2rem;
+    justify-content: left;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label {
+    color: var(--background-colour);
+    cursor: pointer;
+}
+
+.rating input:not(:checked) ~ label:hover,
+.rating input:not(:checked) ~ label:hover ~ label {
+    color: var(--accent-colour);
+}
+
+.rating input:checked ~ label {
+    color: var(--accent-colour);
 }
 
 
