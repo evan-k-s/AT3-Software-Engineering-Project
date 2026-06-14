@@ -24,7 +24,11 @@
             <form class="review-form" id="review-form" method="POST">
                 <div class="review-field">
                     <p class="field-title">Book Title:</p>
-                    <input class="title-input" type="text" name="title" placeholder="Enter Book Title..." required>
+                    <div id="book-search">
+                        <input class="title-input" id="title-search" type="text" name="title" placeholder="Enter Book Title..." required>
+                        <datalist id="title-results"></datalist>
+                        <button type="button" class="search-button" id="searchButton">Search</button>
+                    </div>
                 </div>
 
                 <p class="field-title">Star Rating:</p>
@@ -55,7 +59,7 @@
         </div>
 
         <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
-        <script type="module" src="{{ url_for('static', filename='src/services/logout.js') }}" defer></script>
+        <script src="{{ url_for('static', filename='book_search.js') }}" defer></script>
         
     </body>
 </html>

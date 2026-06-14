@@ -371,6 +371,7 @@ a:hover {
     border-radius: 5px;
     text-align: left;
     font: inherit;
+    margin-right: 10px;
 }
 
 .review-field {
@@ -401,6 +402,19 @@ a:hover {
 
 .rating input:checked ~ label {
     color: var(--accent-colour);
+}
+
+.search-button {
+    padding: 5px;
+    border-radius: 5px;
+    background-color: var(--accent-colour);
+    color: var(--background-colour);
+    text-align: center;
+    border: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    cursor: pointer;
 }
 
 
