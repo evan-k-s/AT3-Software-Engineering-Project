@@ -22,11 +22,11 @@ searchButton.addEventListener('click', async function(event) {
         resultsDropdown.innerHTML = "";
         booksResults.forEach(book => {
             const option = document.createElement('option');
-            option.value = book.key;
-            option.textContent = book.title;
-            console.log(option.textContent);
+            option.value = `${book.title} by ${book.author_name}`;
+            console.log(option.value);
             resultsDropdown.appendChild(option);
         });
+        searchInput.showPicker();
     } catch (error) {
         console.log("Failed to load results");
     }
