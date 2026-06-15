@@ -23,7 +23,12 @@
             </button>
             <form class="review-form" id="review-form" method="POST">
                 <div class="review-field">
-                    <p class="field-title">Book Search:</p>
+                    <p class="field-title" style="display: inline-block;">Book Search:</p>
+                    <div class="tooltip">ⓘ
+                        <span class="tooltip-text">Enter a book below to search in the search bar.
+                            After searching, select a book to review so that the title,
+                            author, and ID appear in the fields below.</span>
+                    </div>
                     <div id="book-search" class="book-search">
                         <input list="title-results" class="title-input" id="title-search" type="text" placeholder="Enter Book Title..." required>
                         <datalist id="title-results"></datalist>

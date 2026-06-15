@@ -375,6 +375,32 @@ a:hover {
     margin-bottom: 10px;
 }
 
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 18px;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 130px;
+    font-size: 16px;
+    background-color: var(--background-colour);
+    color: var(--primary-text);
+    border: 1px solid var(--accent-colour);
+    text-align: center;
+    padding: 5px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+}
+
 .book-input {
     field-sizing: content;
     padding: 5px;
