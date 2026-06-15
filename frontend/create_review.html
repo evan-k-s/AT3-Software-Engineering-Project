@@ -23,11 +23,20 @@
             </button>
             <form class="review-form" id="review-form" method="POST">
                 <div class="review-field">
-                    <p class="field-title">Book Title:</p>
-                    <div id="book-search">
-                        <input list="title-results" class="title-input" id="title-search" type="text" name="title" placeholder="Enter Book Title..." required>
+                    <p class="field-title">Book Search:</p>
+                    <div id="book-search" class="book-search">
+                        <input list="title-results" class="title-input" id="title-search" type="text" placeholder="Enter Book Title..." required>
                         <datalist id="title-results"></datalist>
                         <button type="button" class="search-button" id="searchButton">Search</button>
+
+                        <label for="title">Book Title: </label>
+                        <input type="text" class="book-input" id="title" name="title" readonly>
+
+                        <label for="author">Book Author: </label>
+                        <input type="text" class="book-input" id="author" name="author" readonly>
+
+                        <label for="olid">Book ID: </label>
+                        <input type="text" class="book-input" id="olid" name="olid" readonly>
                     </div>
                 </div>
 

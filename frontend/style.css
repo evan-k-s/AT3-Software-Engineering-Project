@@ -372,6 +372,26 @@ a:hover {
     text-align: left;
     font: inherit;
     margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.book-input {
+    field-sizing: content;
+    padding: 5px;
+    appearance: none;
+    background-color: var(--background-colour);
+    color: var(--primary-text);
+    border: 1px solid var(--accent-colour);
+    border-radius: 5px;
+    text-align: left;
+    font: inherit;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.book-search label {
+    font: inherit;
+    font-style: italic;
 }
 
 .review-field {
