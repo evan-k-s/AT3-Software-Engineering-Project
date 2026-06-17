@@ -46,7 +46,11 @@ login_manager.login_message_category = "info"
 @catch_errors
 @login_required
 def dashboard():
-    return render_template('index.html', user=current_user)
+    try:
+        response = request.args.get('response')
+        return render_template('index.html', user=current_user, response=response)
+    except:
+        return render_template('index.html', user=current_user)
 
 
 @app.route('/reviews')
@@ -79,7 +83,11 @@ def login():
     msg = ""
 
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        session_token, csrf_token = current_user.initiate_user_session()
+        response = jsonify({"session_token": session_token, "csrf_token": csrf_token})
+        response.set_cookie("session_token", session_token, httponly=True, samesite="Lax", secure=True)
+
+        return redirect(url_for('dashboard', response=response))
 
     if request.method == 'POST':
         data = request.get_json()

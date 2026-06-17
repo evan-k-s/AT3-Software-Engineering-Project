@@ -141,6 +141,14 @@
             </div>
         </div>
 
+        <script>
+            if (sessionStorage.getItem('session_token') == null || sessionStorage.getItem('csrf_token') == null) {
+                sessionStorage.setItem('session_token', "{{ response.session_token }}");
+                sessionStorage.setItem('csrf_token', "{{ response.csrf_token }}");
+                sessionStorage.setItem('owner', "{{ current_user.username }}");
+            };
+        </script>
+
         <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
         <script type="module" src="{{ url_for('static', filename='src/services/logout.js') }}" defer></script>
         
