@@ -47,31 +47,59 @@
 
                 <p class="field-title">Star Rating:</p>
                 <div class="rating">
-                    <input type="radio" id="star5" name="rating" value="5">
+                    <input type="radio" id="star5" name="rating" value="5" required>
                     <label for="star5" title="5 stars">★</label>
 
-                    <input type="radio" id="star4" name="rating" value="4">
+                    <input type="radio" id="star4" name="rating" value="4" required>
                     <label for="star4" title="4 stars">★</label>
 
-                    <input type="radio" id="star3" name="rating" value="3">
+                    <input type="radio" id="star3" name="rating" value="3" required>
                     <label for="star3" title="3 stars">★</label>
 
-                    <input type="radio" id="star2" name="rating" value="2">
+                    <input type="radio" id="star2" name="rating" value="2" required>
                     <label for="star2" title="2 stars">★</label>
 
-                    <input type="radio" id="star1" name="rating" value="1">
+                    <input type="radio" id="star1" name="rating" value="1" required>
                     <label for="star1" title="1 star">★</label>
                 </div>
 
                 <div class="review-field">
                         <p class="field-title">Review Body:</p>
-                        <textarea class="paragraph-input" name="title" placeholder="Enter Review Body..." required></textarea>
+                        <textarea class="paragraph-input" name="reviewbody" placeholder="Enter Review Body..." required></textarea>
                 </div>
 
                 <button class="dash-button" type="submit">Create Review</button>
             </form>
         </div>
 
+        <script type="module">
+            import { requestBackend } from "{{ url_for('static', filename='src/services/api.js') }}";
+            document.getElementById("review-form").addEventListener('submit', async function(event) {
+                event.preventDefault();
+                try {
+                    let title = event.target.title.value;
+                    let author = event.target.author.value;
+                    let olid = event.target.olid.value;
+                    let rating = event.target.elements.rating.value;
+                    let reviewBody = event.target.reviewbody.value;
+
+                    if (title.trim().length == 0 || author.trim().length == 0 || olid.trim().length == 0) {
+                        alert("Missing Fields!")
+                    };
+                    const tokens = {
+                        sessionToken: sessionStorage.getItem("session_token"),
+                        csrfToken: sessionStorage.getItem("csrf_token"),
+                    }
+                    console.log(tokens);
+                    const body = { title, author, olid, rating, reviewBody };
+                    await requestBackend("POST", "create-review", tokens, body, null);
+                    window.location.href = "/";
+                } catch (error) {
+                    alert("Incorrect credentials!")
+                    console.error("Failed: ", error);
+                }
+            });
+        </script>
         <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
         <script src="{{ url_for('static', filename='book_search.js') }}" defer></script>
         

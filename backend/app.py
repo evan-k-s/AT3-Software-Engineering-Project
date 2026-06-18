@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from database.data import db, User
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
+from services.review import user_create_review
 from decorators.error import catch_errors
 import re
 import os
@@ -57,12 +58,31 @@ def dashboard():
 @catch_errors
 @login_required
 def reviews():
-    return render_template('reviews.html', user=current_user)
+    reviews = current_user.reviews
+    return render_template('reviews.html', user=current_user, reviews=reviews)
 
-@app.route('/create-review')
+@app.route('/create-review', methods=['GET', 'POST'])
 @catch_errors
 @login_required
 def create_reviews():
+    if request.method == 'POST':
+        data = request.get_json()
+        if ("title" in data) and ("author" in data) and ("olid" in data) and ("rating" in data) and ("reviewBody" in data):
+            title = data["title"]
+            author = data["author"]
+            olid = data["olid"]
+            rating = int(data["rating"])
+            review_body = data["reviewBody"]
+            
+            user = current_user
+
+            user_create_review(user, title, author, olid, rating, review_body)
+
+            return {}, 200
+        else:
+            msg = "Missing required fields for review."
+            raise AccessError("Missing required fields for review.")
+
     return render_template('create_review.html', user=current_user)
 
 @app.route('/recommendations')

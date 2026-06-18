@@ -18,6 +18,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     session_token = db.Column(db.String(50), nullable=False)
     csrf_token = db.Column(db.String(50), nullable=False)
+    reviews = db.relationship('Review', backref='user')
     
     def __init__(self, username, email, created_at, password=None, password_hash=None, session_token=None, csrf_token=None, **kwargs):
         
@@ -84,4 +85,51 @@ class User(UserMixin, db.Model):
             created_at=data["created_at"],
             session_token=data.get("session_token"),
             csrf_token=data.get("csrf_token")
+        )
+
+
+class Review(db.Model):
+    __tablename__ = "user_reviews"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_accounts.id'), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
+    author = db.Column(db.String(100), nullable=False)
+    olid = db.Column(db.String(80), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    review_body = db.Column(db.Text, nullable=False)
+
+    def __init__(self, user, title, author, olid, rating, review_body):
+        self.user = user
+        self.title = title
+        self.author = author
+        self.olid = olid
+        self.rating = rating
+        self.review_body = review_body
+
+    def __repr__(self):
+        return f"<Review from {self.user.username} about {self.title} by {self.author}>"
+    
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "author": self.author,
+            "olid": self.olid,
+            "rating": self.rating,
+            "review_body": self.review_body
+        }
+    
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            title=data["title"],
+            author=data["author"],
+            olid=data["olid"],
+            rating=data["rating"],
+            review_body=data["review_body"]
         )
