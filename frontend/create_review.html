@@ -95,7 +95,7 @@
                     await requestBackend("POST", "create-review", tokens, body, null);
                     window.location.href = "/";
                 } catch (error) {
-                    alert("Incorrect credentials!")
+                    alert(error)
                     console.error("Failed: ", error);
                 }
             });
