@@ -8,6 +8,7 @@ from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
 from services.review import user_create_review
 from decorators.error import catch_errors
+from core.auth_core import authorise_user
 import re
 import os
 
@@ -40,6 +41,34 @@ login_manager.login_view = 'login'
 
 login_manager.login_message = "Please log in!"
 login_manager.login_message_category = "info"
+
+
+IGNORE_AUTH_PATHS = [
+    "/register",
+    "/login",
+]
+
+def bypass_auth_check(request):
+    if request.path in IGNORE_AUTH_PATHS:
+        return True
+    else:
+        return False
+
+@app.before_request
+@catch_errors
+def flask_middle_auth():
+    if request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
+        if bypass_auth_check(request):
+            return
+
+        # Retrieve session and CSRF tokens from headers and validate
+        session_token = request.headers.get("Authorization")
+        csrf_token = request.headers.get("X-CSRF-Token")
+        print(session_token, csrf_token)
+        if not session_token:
+            raise AccessError("No session token found")
+        else:
+            authorise_user(session_token, csrf_token)
 
 
 @app.route('/')
