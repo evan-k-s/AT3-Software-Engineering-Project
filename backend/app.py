@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from database.data import db, User
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
-from services.review import user_create_review
+from services.review import user_create_review, user_delete_review
 from decorators.error import catch_errors
 from core.auth_core import authorise_user
 import re
@@ -113,6 +113,24 @@ def create_reviews():
             raise AccessError("Missing required fields for review.")
 
     return render_template('create_review.html', user=current_user)
+
+
+@app.route('/delete-review', methods=['GET', 'POST'])
+@catch_errors
+@login_required
+def delete_review():
+    if request.method == 'POST':
+        data = request.get_json()
+        if "review_id" in data:
+            review_id = data["review_id"]
+
+            user = current_user
+
+            user_delete_review(user, review_id)
+
+            return {}, 200
+        else:
+            raise AccessError("Review does not exist.")
 
 @app.route('/recommendations')
 @catch_errors

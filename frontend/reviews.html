@@ -38,7 +38,7 @@
                         <p class="review-card-author">{{ review.author }}</p>
                         <p class="review-card-rating">Rating: {{ review.rating }}/5</p>
                         <button type="button" class="edit-button">Edit Review</button>
-                        <button type="button" class="delete-button">Delete Review</button>
+                        <button type="button" class="delete-button" onclick="deleteReview('{{ review.id }}')">Delete Review</button>
                     </div>
                     {% endfor %}
                     {% else %}
@@ -47,7 +47,8 @@
                 </div>
             </div>
         </div>
-
+        
+        <script type="module" src="{{ url_for('static', filename='src/services/review.js') }}" defer></script>
         <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
         <script type="module" src="{{ url_for('static', filename='src/services/logout.js') }}" defer></script>
         

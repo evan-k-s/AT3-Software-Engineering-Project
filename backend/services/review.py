@@ -14,3 +14,9 @@ def user_create_review(user, title, author, olid, rating, review_body):
     new_review = Review(user, title, author, olid, rating, review_body)
 
     new_review.save_to_db()
+
+
+def user_delete_review(user, id):
+    review = Review.query.filter_by(user_id=user.id, id=id).first()
+    db.session.delete(review)
+    db.session.commit()
