@@ -6,7 +6,9 @@ from dotenv import load_dotenv
 from database.data import db, User
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
+from services.review import user_create_review, user_delete_review
 from decorators.error import catch_errors
+from core.auth_core import authorise_user
 import re
 import os
 
@@ -41,6 +43,44 @@ login_manager.login_message = "Please log in!"
 login_manager.login_message_category = "info"
 
 
+first_request = True
+
+IGNORE_AUTH_PATHS = [
+    "/register",
+    "/login",
+]
+
+def bypass_auth_check(request):
+    if request.path in IGNORE_AUTH_PATHS:
+        return True
+    else:
+        return False
+
+@app.before_request
+@catch_errors
+def flask_middle_auth():
+    global first_request
+    if request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
+        if bypass_auth_check(request):
+            return
+
+        # Retrieve session and CSRF tokens from headers and validate
+        session_token = request.headers.get("Authorization")
+        csrf_token = request.headers.get("X-CSRF-Token")
+        print(session_token, csrf_token)
+        if not session_token:
+            raise AccessError("No session token found")
+        else:
+            authorise_user(session_token, csrf_token)
+    elif first_request:
+        first_request = False
+        response = redirect(request.url_rule)
+        response.set_cookie("session_token", session_token, httponly=True, samesite="Lax", secure=True)
+        response.set_cookie("csrf_token", csrf_token, httponly=True, samesite="Lax", secure=True)
+
+        return response
+
+
 @app.route('/')
 @app.route('/dashboard')
 @catch_errors
@@ -53,13 +93,50 @@ def dashboard():
 @catch_errors
 @login_required
 def reviews():
-    return render_template('reviews.html', user=current_user)
+    reviews = current_user.reviews
+    return render_template('reviews.html', user=current_user, reviews=reviews)
 
-@app.route('/create-review')
+@app.route('/create-review', methods=['GET', 'POST'])
 @catch_errors
 @login_required
 def create_reviews():
+    if request.method == 'POST':
+        data = request.get_json()
+        if ("title" in data) and ("author" in data) and ("olid" in data) and ("rating" in data) and ("reviewBody" in data):
+            title = data["title"]
+            author = data["author"]
+            olid = data["olid"]
+            rating = int(data["rating"])
+            review_body = data["reviewBody"]
+            
+            user = current_user
+
+            user_create_review(user, title, author, olid, rating, review_body)
+
+            return {}, 200
+        else:
+            msg = "Missing required fields for review."
+            raise AccessError("Missing required fields for review.")
+
     return render_template('create_review.html', user=current_user)
+
+
+@app.route('/delete-review', methods=['GET', 'POST'])
+@catch_errors
+@login_required
+def delete_review():
+    if request.method == 'POST':
+        data = request.get_json()
+        if "review_id" in data:
+            review_id = data["review_id"]
+
+            user = current_user
+
+            user_delete_review(user, review_id)
+
+            return {}, 200
+        else:
+            raise AccessError("Review does not exist.")
 
 @app.route('/recommendations')
 @catch_errors
@@ -79,7 +156,12 @@ def login():
     msg = ""
 
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        session_token, csrf_token = current_user.initiate_user_session()
+        response = redirect(url_for('dashboard'))
+        response.set_cookie("session_token", session_token, httponly=True, samesite="Lax", secure=True)
+        response.set_cookie("csrf_token", csrf_token, httponly=True, samesite="Lax", secure=True)
+
+        return response
 
     if request.method == 'POST':
         data = request.get_json()

@@ -371,6 +371,53 @@ a:hover {
     border-radius: 5px;
     text-align: left;
     font: inherit;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 18px;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 130px;
+    font-size: 16px;
+    background-color: var(--background-colour);
+    color: var(--primary-text);
+    border: 1px solid var(--accent-colour);
+    text-align: center;
+    padding: 5px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+}
+
+.book-input {
+    field-sizing: content;
+    padding: 5px;
+    appearance: none;
+    background-color: var(--background-colour);
+    color: var(--primary-text);
+    border: 1px solid var(--accent-colour);
+    border-radius: 5px;
+    text-align: left;
+    font: inherit;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.book-search label {
+    font: inherit;
+    font-style: italic;
 }
 
 .review-field {
@@ -401,6 +448,19 @@ a:hover {
 
 .rating input:checked ~ label {
     color: var(--accent-colour);
+}
+
+.search-button {
+    padding: 5px;
+    border-radius: 5px;
+    background-color: var(--accent-colour);
+    color: var(--background-colour);
+    text-align: center;
+    border: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    cursor: pointer;
 }
 
 

@@ -141,6 +141,15 @@
             </div>
         </div>
 
+        <script type="module">
+            import { handleTokens } from "{{ url_for('static', filename='src/services/auth.js') }}";
+            
+            const session_token = "{{ request.cookies.get('session_token') }}";
+            const csrf_token = "{{ request.cookies.get('csrf_token') }}";
+            const user = "{{ current_user.username }}";
+            await handleTokens(session_token, csrf_token, user);
+        </script>
+
         <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
         <script type="module" src="{{ url_for('static', filename='src/services/logout.js') }}" defer></script>
         
