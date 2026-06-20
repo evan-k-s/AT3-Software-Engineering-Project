@@ -42,6 +42,13 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f"<User {self.username}>"
     
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+        db.session.add(self)
+        db.session.commit()
+    
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -54,6 +61,7 @@ class User(UserMixin, db.Model):
     def initiate_user_session(self):
         self.session_token = self.generate_token()
         self.csrf_token = self.generate_token()
+        self.update(session_token=self.session_token, csrf_token=self.csrf_token)
         return self.session_token, self.csrf_token
     
     def revoke_user_session(self):

@@ -49,3 +49,13 @@ export const authLogout = async () => {
     sessionStorage.removeItem("session_token");
     sessionStorage.removeItem("owner");
 }
+
+export const handleTokens = async (session_token, csrf_token, user) => {
+    const stored_session_token = sessionStorage.getItem('session_token');
+    const stored_csrf_token = sessionStorage.getItem('csrf_token');
+    if ((stored_session_token == null || stored_csrf_token == null) || (stored_session_token != session_token || stored_csrf_token != csrf_token)) {
+        sessionStorage.setItem('session_token', session_token);
+        sessionStorage.setItem('csrf_token', csrf_token);
+        sessionStorage.setItem('owner', user);
+    };
+};

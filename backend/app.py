@@ -43,6 +43,8 @@ login_manager.login_message = "Please log in!"
 login_manager.login_message_category = "info"
 
 
+first_request = True
+
 IGNORE_AUTH_PATHS = [
     "/register",
     "/login",
@@ -57,6 +59,7 @@ def bypass_auth_check(request):
 @app.before_request
 @catch_errors
 def flask_middle_auth():
+    global first_request
     if request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
         if bypass_auth_check(request):
             return
@@ -69,6 +72,13 @@ def flask_middle_auth():
             raise AccessError("No session token found")
         else:
             authorise_user(session_token, csrf_token)
+    elif first_request:
+        first_request = False
+        response = redirect(request.url_rule)
+        response.set_cookie("session_token", session_token, httponly=True, samesite="Lax", secure=True)
+        response.set_cookie("csrf_token", csrf_token, httponly=True, samesite="Lax", secure=True)
+
+        return response
 
 
 @app.route('/')
@@ -76,11 +86,7 @@ def flask_middle_auth():
 @catch_errors
 @login_required
 def dashboard():
-    try:
-        response = request.args.get('response')
-        return render_template('index.html', user=current_user, response=response)
-    except:
-        return render_template('index.html', user=current_user)
+    return render_template('index.html', user=current_user)
 
 
 @app.route('/reviews')
@@ -151,10 +157,11 @@ def login():
 
     if current_user.is_authenticated:
         session_token, csrf_token = current_user.initiate_user_session()
-        response = jsonify({"session_token": session_token, "csrf_token": csrf_token})
+        response = redirect(url_for('dashboard'))
         response.set_cookie("session_token", session_token, httponly=True, samesite="Lax", secure=True)
+        response.set_cookie("csrf_token", csrf_token, httponly=True, samesite="Lax", secure=True)
 
-        return redirect(url_for('dashboard', response=response))
+        return response
 
     if request.method == 'POST':
         data = request.get_json()
