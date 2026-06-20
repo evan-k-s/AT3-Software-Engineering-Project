@@ -74,6 +74,8 @@ def flask_middle_auth():
             authorise_user(session_token, csrf_token)
     elif first_request:
         first_request = False
+        session_token = request.headers.get("Authorization")
+        csrf_token = request.headers.get("X-CSRF-Token")
         response = redirect(request.url_rule)
         response.set_cookie("session_token", session_token, httponly=True, samesite="Lax", secure=True)
         response.set_cookie("csrf_token", csrf_token, httponly=True, samesite="Lax", secure=True)
