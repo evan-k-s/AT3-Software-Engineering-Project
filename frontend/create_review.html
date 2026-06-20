@@ -90,10 +90,9 @@
                         sessionToken: sessionStorage.getItem("session_token"),
                         csrfToken: sessionStorage.getItem("csrf_token"),
                     }
-                    console.log(tokens);
                     const body = { title, author, olid, rating, reviewBody };
                     await requestBackend("POST", "create-review", tokens, body, null);
-                    window.location.href = "/";
+                    window.location.href = "/reviews";
                 } catch (error) {
                     alert(error)
                     console.error("Failed: ", error);
