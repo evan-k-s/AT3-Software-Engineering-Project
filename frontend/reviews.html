@@ -34,7 +34,7 @@
                     {% for review in reviews %}
                     <div class="review-card">
                         <p class="dash-title">{{ review.title }}</p>
-                        <img src="https://t4.ftcdn.net/jpg/03/64/17/57/360_F_364175760_dcXwFAHAjqzVEjBN7tpvSyQmlOe2IEVl.jpg" alt="">
+                        <img src="https://covers.openlibrary.org/b/olid/{{ review.olid }}.jpg" alt="{{ review.olid }}">
                         <p class="review-card-author">{{ review.author }}</p>
                         <p class="review-card-rating">Rating: {{ review.rating }}/5</p>
                         <button type="button" class="edit-button">Edit Review</button>
