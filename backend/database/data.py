@@ -105,14 +105,16 @@ class Review(db.Model):
     olid = db.Column(db.String(80), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     review_body = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
-    def __init__(self, user, title, author, olid, rating, review_body):
+    def __init__(self, user, title, author, olid, rating, review_body, created_at):
         self.user = user
         self.title = title
         self.author = author
         self.olid = olid
         self.rating = rating
         self.review_body = review_body
+        self.created_at = created_at
 
     def __repr__(self):
         return f"<Review from {self.user.username} about {self.title} by {self.author}>"
@@ -129,7 +131,8 @@ class Review(db.Model):
             "author": self.author,
             "olid": self.olid,
             "rating": self.rating,
-            "review_body": self.review_body
+            "review_body": self.review_body,
+            "created_at": self.created_at
         }
     
     @classmethod
@@ -139,5 +142,6 @@ class Review(db.Model):
             author=data["author"],
             olid=data["olid"],
             rating=data["rating"],
-            review_body=data["review_body"]
+            review_body=data["review_body"],
+            created_at=data["created_at"]
         )

@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from classes.Error import InputError, AccessError
 from database.data import db, Review, User
+from datetime import datetime
 
 def user_create_review(user, title, author, olid, rating, review_body):
     if type(rating) != int:
@@ -10,8 +11,10 @@ def user_create_review(user, title, author, olid, rating, review_body):
 
     if exists:
         raise InputError("Book already reviewed")
+    
+    created_at = datetime.now()
 
-    new_review = Review(user, title, author, olid, rating, review_body)
+    new_review = Review(user, title, author, olid, rating, review_body, created_at)
 
     new_review.save_to_db()
 
