@@ -463,6 +463,45 @@ a:hover {
     cursor: pointer;
 }
 
+.view-cover {
+    width: 200px;
+}
+
+.view-review {
+    background-color: var(--secondary-background);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.view-review p {
+    background-color: var(--background-colour);
+    padding: 5px;
+    border-radius: 5px;
+    width: 60%;
+}
+
+.view-review .review-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-style: italic;
+    background-color: var(--secondary-background);
+}
+
+.view-review .review-date {
+    background-color: var(--secondary-accent);
+    width: fit-content;
+    color: var(--background-colour);
+    border: 0.5px solid var(--secondary-accent);
+}
+
+.view-review hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--background-colour);
+    width: 100%;
+    margin: auto;
+    margin-bottom: 10px;
+}
 
 
 /* RECOMMENDATIONS */
