@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from database.data import db, User, Review
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
-from services.review import user_create_review, user_delete_review
+from services.review import user_create_review, user_delete_review, user_edit_review
 from decorators.error import catch_errors
 from core.auth_core import authorise_user
 import re
@@ -145,6 +145,30 @@ def delete_review():
 def view_review(id, olid):
     review = Review.query.filter_by(user_id=current_user.id, id=id).first()
     return render_template('view_review.html', user=current_user, review=review)
+
+
+@app.route('/edit-review/<int:id>/<olid>', methods=['GET', 'POST'])
+@catch_errors
+@login_required
+def edit_review(id, olid):
+    if request.method == 'POST':
+        data = request.get_json()
+        if ("olid" in data) and ("rating" in data) and ("reviewBody" in data):
+            olid = data["olid"]
+            rating = int(data["rating"])
+            review_body = data["reviewBody"]
+
+            user = current_user
+
+            user_edit_review(user, id, olid, rating, review_body)
+
+            return {}, 200
+        else:
+            raise AccessError("Missing required fields: cannot edit review!")
+    
+    review = Review.query.filter_by(user_id=current_user.id, id=id).first()
+
+    return render_template('edit_review.html', user=current_user, review=review)
 
 
 @app.route('/recommendations')

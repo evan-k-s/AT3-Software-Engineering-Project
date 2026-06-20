@@ -23,3 +23,15 @@ def user_delete_review(user, id):
     review = Review.query.filter_by(user_id=user.id, id=id).first()
     db.session.delete(review)
     db.session.commit()
+
+
+def user_edit_review(user, id, olid, rating, review_body):
+    if type(rating) != int:
+        InputError("Invalid rating!")
+    
+    review = Review.query.filter_by(user_id=user.id, id=id).first()
+
+    if (rating == review.rating) and (review_body == review.review_body):
+        raise InputError("You must edit the review to perform this action!")
+
+    review.update(rating=rating, review_body=review_body)

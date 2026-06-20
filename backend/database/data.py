@@ -120,6 +120,14 @@ class Review(db.Model):
         return f"<Review from {self.user.username} about {self.title} by {self.author}>"
     
 
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+        db.session.add(self)
+        db.session.commit()
+
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
