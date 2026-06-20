@@ -114,12 +114,16 @@ h1 {
 }
 
 a {
+    text-decoration: none;
+}
+
+.link {
     color: var(--accent-colour);
     text-decoration: none;
     font-style: oblique;
 }
 
-a:hover {
+.link:hover {
     text-decoration: underline wavy;
 }
 
@@ -501,6 +505,24 @@ a:hover {
     width: 100%;
     margin: auto;
     margin-bottom: 10px;
+}
+
+.cancel-button {
+    padding: 12.5px;
+    border-radius: 10px;
+    background-color: var(--background-colour);
+    color: var(--accent-colour);
+    text-align: center;
+    border: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.cancel-button:hover {
+    box-shadow: 0 0 5px var(--accent-colour);
 }
 
 
