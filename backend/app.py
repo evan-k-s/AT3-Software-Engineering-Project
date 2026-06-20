@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from dotenv import load_dotenv
-from database.data import db, User
+from database.data import db, User, Review
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
 from services.review import user_create_review, user_delete_review
@@ -137,6 +137,15 @@ def delete_review():
             return {}, 200
         else:
             raise AccessError("Review does not exist.")
+
+
+@app.route('/view-review/<int:id>/<olid>', methods=['GET', 'POST'])
+@catch_errors
+@login_required
+def view_review(id, olid):
+    review = Review.query.filter_by(user_id=current_user.id, id=id).first()
+    return render_template('view_review.html', user=current_user, review=review)
+
 
 @app.route('/recommendations')
 @catch_errors
