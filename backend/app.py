@@ -251,16 +251,4 @@ def register():
 def logout():
     auth_logout_user(current_user.session_token)
     logout_user()
-    return {}, 200
-
-
-@login_manager.user_loader
-@catch_errors
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-
-if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
+    
