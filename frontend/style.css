@@ -324,6 +324,7 @@ a {
     font-weight: bold;
     letter-spacing: 0.1em;
     transition: 0.3s ease;
+    cursor: pointer;
 }
 
 .edit-button:hover {
@@ -341,6 +342,7 @@ a {
     letter-spacing: 0.1em;
     transition: 0.3s ease;
     margin-bottom: 15px;
+    cursor: pointer;
 }
 
 .delete-button:hover {
