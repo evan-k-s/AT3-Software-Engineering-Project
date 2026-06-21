@@ -114,12 +114,16 @@ h1 {
 }
 
 a {
+    text-decoration: none;
+}
+
+.link {
     color: var(--accent-colour);
     text-decoration: none;
     font-style: oblique;
 }
 
-a:hover {
+.link:hover {
     text-decoration: underline wavy;
 }
 
@@ -320,6 +324,7 @@ a:hover {
     font-weight: bold;
     letter-spacing: 0.1em;
     transition: 0.3s ease;
+    cursor: pointer;
 }
 
 .edit-button:hover {
@@ -337,6 +342,7 @@ a:hover {
     letter-spacing: 0.1em;
     transition: 0.3s ease;
     margin-bottom: 15px;
+    cursor: pointer;
 }
 
 .delete-button:hover {
@@ -463,6 +469,63 @@ a:hover {
     cursor: pointer;
 }
 
+.view-cover {
+    width: 200px;
+}
+
+.view-review {
+    background-color: var(--secondary-background);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.view-review p {
+    background-color: var(--background-colour);
+    padding: 5px;
+    border-radius: 5px;
+    width: 60%;
+}
+
+.view-review .review-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-style: italic;
+    background-color: var(--secondary-background);
+}
+
+.view-review .review-date {
+    background-color: var(--secondary-accent);
+    width: fit-content;
+    color: var(--background-colour);
+    border: 0.5px solid var(--secondary-accent);
+}
+
+.view-review hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--background-colour);
+    width: 100%;
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+.cancel-button {
+    padding: 12.5px;
+    border-radius: 10px;
+    background-color: var(--background-colour);
+    color: var(--accent-colour);
+    text-align: center;
+    border: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.cancel-button:hover {
+    box-shadow: 0 0 5px var(--accent-colour);
+}
 
 
 /* RECOMMENDATIONS */
