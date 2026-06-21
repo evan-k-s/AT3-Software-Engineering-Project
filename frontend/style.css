@@ -91,6 +91,15 @@ body {
     text-transform: uppercase;
 }
 
+.navbar .back-button {
+    color: var(--primary-text);
+    border: 1px solid var(--accent-colour);
+    border-radius: 5px;
+    margin: 10px;
+    font-style: normal;
+    background-color: var(--background-colour);
+}
+
 .content {
     margin-left: 200px;
     padding: 1px 20px;
@@ -105,12 +114,16 @@ h1 {
 }
 
 a {
+    text-decoration: none;
+}
+
+.link {
     color: var(--accent-colour);
     text-decoration: none;
     font-style: oblique;
 }
 
-a:hover {
+.link:hover {
     text-decoration: underline wavy;
 }
 
@@ -185,6 +198,7 @@ a:hover {
     font-weight: bold;
     letter-spacing: 0.1em;
     transition: 0.3s ease;
+    cursor: pointer;
 }
 
 .dash-button:hover {
@@ -310,6 +324,7 @@ a:hover {
     font-weight: bold;
     letter-spacing: 0.1em;
     transition: 0.3s ease;
+    cursor: pointer;
 }
 
 .edit-button:hover {
@@ -327,12 +342,190 @@ a:hover {
     letter-spacing: 0.1em;
     transition: 0.3s ease;
     margin-bottom: 15px;
+    cursor: pointer;
 }
 
 .delete-button:hover {
     box-shadow: 0 0 5px var(--accent-colour);
 }
 
+.review-form {
+    background-color: var(--secondary-background);
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.paragraph-input {
+    width: 90%;
+    resize: vertical;
+    appearance: none;
+    padding: 8px;
+    background-color: var(--background-colour);
+    color: var(--primary-text);
+    border: none;
+    border-radius: 5px;
+    font: inherit;
+}
+
+.title-input {
+    width: 90%;
+    padding: 8px;
+    appearance: none;
+    background-color: var(--background-colour);
+    color: var(--primary-text);
+    border: none;
+    border-radius: 5px;
+    text-align: left;
+    font: inherit;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 18px;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 130px;
+    font-size: 16px;
+    background-color: var(--background-colour);
+    color: var(--primary-text);
+    border: 1px solid var(--accent-colour);
+    text-align: center;
+    padding: 5px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+}
+
+.book-input {
+    field-sizing: content;
+    padding: 5px;
+    appearance: none;
+    background-color: var(--background-colour);
+    color: var(--primary-text);
+    border: 1px solid var(--accent-colour);
+    border-radius: 5px;
+    text-align: left;
+    font: inherit;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.book-search label {
+    font: inherit;
+    font-style: italic;
+}
+
+.review-field {
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: 2rem;
+    justify-content: left;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label {
+    color: var(--background-colour);
+    cursor: pointer;
+}
+
+.rating input:not(:checked) ~ label:hover,
+.rating input:not(:checked) ~ label:hover ~ label {
+    color: var(--accent-colour);
+}
+
+.rating input:checked ~ label {
+    color: var(--accent-colour);
+}
+
+.search-button {
+    padding: 5px;
+    border-radius: 5px;
+    background-color: var(--accent-colour);
+    color: var(--background-colour);
+    text-align: center;
+    border: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+}
+
+.view-cover {
+    width: 200px;
+}
+
+.view-review {
+    background-color: var(--secondary-background);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.view-review p {
+    background-color: var(--background-colour);
+    padding: 5px;
+    border-radius: 5px;
+    width: 60%;
+}
+
+.view-review .review-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-style: italic;
+    background-color: var(--secondary-background);
+}
+
+.view-review .review-date {
+    background-color: var(--secondary-accent);
+    width: fit-content;
+    color: var(--background-colour);
+    border: 0.5px solid var(--secondary-accent);
+}
+
+.view-review hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--background-colour);
+    width: 100%;
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+.cancel-button {
+    padding: 12.5px;
+    border-radius: 10px;
+    background-color: var(--background-colour);
+    color: var(--accent-colour);
+    text-align: center;
+    border: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.cancel-button:hover {
+    box-shadow: 0 0 5px var(--accent-colour);
+}
 
 
 /* RECOMMENDATIONS */

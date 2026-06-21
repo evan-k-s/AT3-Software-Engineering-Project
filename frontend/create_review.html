@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+        <title>Book Reviewing Site</title>
+    </head>
+    <body>
+        <div class="navbar">
+            <ul>
+                <li><h3>Navigation Bar</h3></li>
+                <hr>
+                <li><a class="back-button" href="{{ url_for('reviews') }}" id="review">Back to Reviews</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <h1>-Create Review-</h1>
+            <button class="theme-switch" id="theme-switch">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Zm0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M565-395q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35Zm-226.5 56.5Q280-397 280-480t58.5-141.5Q397-680 480-680t141.5 58.5Q680-563 680-480t-58.5 141.5Q563-280 480-280t-141.5-58.5ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Zm326-268Z"/></svg>
+            </button>
+            <form class="review-form" id="review-form" method="POST">
+                <div class="review-field">
+                    <p class="field-title" style="display: inline-block;">Book Search:</p>
+                    <div class="tooltip">ⓘ
+                        <span class="tooltip-text">Enter a book below to search in the search bar.
+                            After searching, select a book to review so that the title,
+                            author, and ID appear in the fields below.</span>
+                    </div>
+                    <div id="book-search" class="book-search">
+                        <input list="title-results" class="title-input" id="title-search" type="text" placeholder="Enter Book Title..." required>
+                        <datalist id="title-results"></datalist>
+                        <button type="button" class="search-button" id="searchButton">Search</button>
+
+                        <label for="title">Book Title: </label>
+                        <input type="text" class="book-input" id="title" name="title" readonly>
+
+                        <label for="author">Book Author: </label>
+                        <input type="text" class="book-input" id="author" name="author" readonly>
+
+                        <label for="olid">Book ID: </label>
+                        <input type="text" class="book-input" id="olid" name="olid" readonly>
+                    </div>
+                </div>
+
+                <p class="field-title">Star Rating:</p>
+                <div class="rating">
+                    <input type="radio" id="star5" name="rating" value="5" required>
+                    <label for="star5" title="5 stars">★</label>
+
+                    <input type="radio" id="star4" name="rating" value="4" required>
+                    <label for="star4" title="4 stars">★</label>
+
+                    <input type="radio" id="star3" name="rating" value="3" required>
+                    <label for="star3" title="3 stars">★</label>
+
+                    <input type="radio" id="star2" name="rating" value="2" required>
+                    <label for="star2" title="2 stars">★</label>
+
+                    <input type="radio" id="star1" name="rating" value="1" required>
+                    <label for="star1" title="1 star">★</label>
+                </div>
+
+                <div class="review-field">
+                        <p class="field-title">Review Body:</p>
+                        <textarea class="paragraph-input" name="reviewbody" placeholder="Enter Review Body..." required></textarea>
+                </div>
+
+                <button class="dash-button" type="submit">Create Review</button>
+            </form>
+        </div>
+
+        <script type="module">
+            import { requestBackend } from "{{ url_for('static', filename='src/services/api.js') }}";
+            document.getElementById("review-form").addEventListener('submit', async function(event) {
+                event.preventDefault();
+                try {
+                    let title = event.target.title.value;
+                    let author = event.target.author.value;
+                    let olid = event.target.olid.value;
+                    let rating = event.target.elements.rating.value;
+                    let reviewBody = event.target.reviewbody.value;
+
+                    if (title.trim().length == 0 || author.trim().length == 0 || olid.trim().length == 0) {
+                        alert("Missing Fields!")
+                    };
+                    const tokens = {
+                        sessionToken: sessionStorage.getItem("session_token"),
+                        csrfToken: sessionStorage.getItem("csrf_token"),
+                    }
+                    const body = { title, author, olid, rating, reviewBody };
+                    await requestBackend("POST", "create-review", tokens, body, null);
+                    window.location.href = "/reviews";
+                } catch (error) {
+                    alert(error)
+                    console.error("Failed: ", error);
+                }
+            });
+        </script>
+        <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
+        <script src="{{ url_for('static', filename='book_search.js') }}" defer></script>
+        
+    </body>
+</html>

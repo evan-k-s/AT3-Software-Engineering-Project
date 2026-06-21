@@ -18,6 +18,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     session_token = db.Column(db.String(50), nullable=False)
     csrf_token = db.Column(db.String(50), nullable=False)
+    reviews = db.relationship('Review', backref='user')
     
     def __init__(self, username, email, created_at, password=None, password_hash=None, session_token=None, csrf_token=None, **kwargs):
         
@@ -41,6 +42,13 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f"<User {self.username}>"
     
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+        db.session.add(self)
+        db.session.commit()
+    
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -53,6 +61,7 @@ class User(UserMixin, db.Model):
     def initiate_user_session(self):
         self.session_token = self.generate_token()
         self.csrf_token = self.generate_token()
+        self.update(session_token=self.session_token, csrf_token=self.csrf_token)
         return self.session_token, self.csrf_token
     
     def revoke_user_session(self):
@@ -84,4 +93,63 @@ class User(UserMixin, db.Model):
             created_at=data["created_at"],
             session_token=data.get("session_token"),
             csrf_token=data.get("csrf_token")
+        )
+
+
+class Review(db.Model):
+    __tablename__ = "user_reviews"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_accounts.id'), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
+    author = db.Column(db.String(100), nullable=False)
+    olid = db.Column(db.String(80), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    review_body = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+
+    def __init__(self, user, title, author, olid, rating, review_body, created_at):
+        self.user = user
+        self.title = title
+        self.author = author
+        self.olid = olid
+        self.rating = rating
+        self.review_body = review_body
+        self.created_at = created_at
+
+    def __repr__(self):
+        return f"<Review from {self.user.username} about {self.title} by {self.author}>"
+    
+
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+        db.session.add(self)
+        db.session.commit()
+
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "author": self.author,
+            "olid": self.olid,
+            "rating": self.rating,
+            "review_body": self.review_body,
+            "created_at": self.created_at
+        }
+    
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            title=data["title"],
+            author=data["author"],
+            olid=data["olid"],
+            rating=data["rating"],
+            review_body=data["review_body"],
+            created_at=data["created_at"]
         )
