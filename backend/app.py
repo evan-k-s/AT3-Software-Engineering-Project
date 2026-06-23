@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from openai import OpenAI
 from dotenv import load_dotenv
 from database.data import db, User, Review
 from classes.Error import AccessError, InputError
@@ -33,6 +34,17 @@ secret_key = os.environ['SECRET_KEY']
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{db_user}:{db_password}@localhost/{db_name}"
 app.config['SECRET_KEY'] = secret_key
 db.init_app(app)
+
+# Configure OpenAI API
+openai_api_key = os.environ['OPENAI_API_KEY']
+openai_model = os.environ['OPENAI_MODEL']
+openai_endpoint = os.environ['OPENAI_ENDPOINT']
+
+client = OpenAI(
+    base_url=openai_endpoint,
+    api_key=openai_api_key,
+)
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
