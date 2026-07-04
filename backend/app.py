@@ -8,6 +8,7 @@ from database.data import db, User, Review
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
 from services.review import user_create_review, user_delete_review, user_edit_review
+from services.recommendations import client, find_user_preferences
 from decorators.error import catch_errors
 from core.auth_core import authorise_user
 import re
@@ -34,16 +35,6 @@ secret_key = os.environ['SECRET_KEY']
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{db_user}:{db_password}@localhost/{db_name}"
 app.config['SECRET_KEY'] = secret_key
 db.init_app(app)
-
-# Configure OpenAI API
-openai_api_key = os.environ['OPENAI_API_KEY']
-openai_model = os.environ['OPENAI_MODEL']
-openai_endpoint = os.environ['OPENAI_ENDPOINT']
-
-client = OpenAI(
-    base_url=openai_endpoint,
-    api_key=openai_api_key,
-)
 
 
 login_manager = LoginManager()
@@ -185,10 +176,26 @@ def edit_review(id, olid):
     return render_template('edit_review.html', user=current_user, review=review)
 
 
-@app.route('/recommendations')
+@app.route('/recommendations', methods=['GET', 'POST'])
 @catch_errors
 @login_required
 def recommendations():
+    if request.method == "POST":
+        reviews = Review.query.filter_by(user_id=current_user.id).all()
+
+        reviews_text_array = []
+
+        for review in reviews:
+            review_text = f"Title: {review.title}\nAuthor: {review.author}\nRating: {review.rating}/5\n\nBody: {review.review_body}"
+            reviews_text_array.append(review_text)
+        
+        reviews_text = "\n\n--- new review ---\n\n".join(reviews_text_array)
+
+        preferences = find_user_preferences(reviews_text)
+        print(preferences)
+
+        return {}, 200
+
     return render_template('recommendations.html', user=current_user)
 
 @app.route('/saved-recommendations')
