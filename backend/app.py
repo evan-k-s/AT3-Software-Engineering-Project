@@ -2,11 +2,13 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from openai import OpenAI
 from dotenv import load_dotenv
 from database.data import db, User, Review
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
 from services.review import user_create_review, user_delete_review, user_edit_review
+from services.recommendations import client, find_user_preferences
 from decorators.error import catch_errors
 from core.auth_core import authorise_user
 import re
@@ -33,6 +35,7 @@ secret_key = os.environ['SECRET_KEY']
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{db_user}:{db_password}@localhost/{db_name}"
 app.config['SECRET_KEY'] = secret_key
 db.init_app(app)
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -173,10 +176,26 @@ def edit_review(id, olid):
     return render_template('edit_review.html', user=current_user, review=review)
 
 
-@app.route('/recommendations')
+@app.route('/recommendations', methods=['GET', 'POST'])
 @catch_errors
 @login_required
 def recommendations():
+    if request.method == "POST":
+        reviews = Review.query.filter_by(user_id=current_user.id).all()
+
+        reviews_text_array = []
+
+        for review in reviews:
+            review_text = f"Title: {review.title}\nAuthor: {review.author}\nRating: {review.rating}/5\n\nBody: {review.review_body}"
+            reviews_text_array.append(review_text)
+        
+        reviews_text = "\n\n--- new review ---\n\n".join(reviews_text_array)
+
+        preferences = find_user_preferences(reviews_text)
+        print(preferences)
+
+        return {}, 200
+
     return render_template('recommendations.html', user=current_user)
 
 @app.route('/saved-recommendations')
@@ -251,4 +270,16 @@ def register():
 def logout():
     auth_logout_user(current_user.session_token)
     logout_user()
-    
+    return {}, 200
+
+
+@login_manager.user_loader
+@catch_errors
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)    
