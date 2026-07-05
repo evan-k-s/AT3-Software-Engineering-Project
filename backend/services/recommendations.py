@@ -1,7 +1,7 @@
 import requests
 from flask_sqlalchemy import SQLAlchemy
 from classes.Error import InputError, AccessError
-from database.data import db, Review, User
+from database.data import db, Review, User, RecentRecommendation
 from datetime import datetime
 from pydantic import BaseModel
 from openai import OpenAI
@@ -58,7 +58,7 @@ def find_user_preferences(reviews_text):
         raise AccessError("Error extracting reviews")
 
 
-def find_book_recommendations(preferences):
+def find_book_recommendations(preferences, no_author=False, limit=12):
     if (not preferences.liked_genres) and (not preferences.liked_authors) and (not preferences.liked_eras):
         raise AccessError("Preferences cannot be extracted! Please increase the detail of your review bodies.")
     
@@ -71,7 +71,7 @@ def find_book_recommendations(preferences):
         genres_string = f"subject:({genres})"
         query_params.append(genres_string)
     
-    if preferences.liked_authors:
+    if preferences.liked_authors and not no_author:
         authors = " OR ".join(preferences.liked_authors)
         authors_string = f"author:({authors})"
         query_params.append(authors_string)
@@ -88,7 +88,7 @@ def find_book_recommendations(preferences):
     
     query_string = " AND ".join(query_params)
 
-    full_url = f"{base_url}?q={query_string}"
+    full_url = f"{base_url}?q={query_string}&limit={limit}"
 
     print(full_url)
 
@@ -96,4 +96,37 @@ def find_book_recommendations(preferences):
 
     data = response.json()
 
-    return data
+    books = data['docs']
+
+    return books
+
+
+def store_recent_recommendations(books, user, combine_recs=False):
+    has_recents = user.recent_recommendations is not None
+
+    if has_recents and not combine_recs:
+        RecentRecommendation.query.filter_by(user_id=user.id).delete()
+        db.session.commit()
+
+    recs_num = 0
+    
+    for book in books:
+        if book.get('cover_edition_key') is None:
+            continue
+
+        title = book['title']
+        author = ", ".join(book['author_name'])
+        olid = book['cover_edition_key']
+        published = book['first_publish_year']
+        created_at = datetime.now()
+
+        if User.query.join(User.reviews).filter(User.id==user.id, Review.olid==olid).first() is not None:
+            continue
+
+        recent_recommendation = RecentRecommendation(user, title, author, olid, published, created_at)
+
+        recent_recommendation.save_to_db()
+
+        recs_num += 1
+
+    return recs_num

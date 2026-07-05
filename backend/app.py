@@ -8,7 +8,7 @@ from database.data import db, User, Review
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
 from services.review import user_create_review, user_delete_review, user_edit_review
-from services.recommendations import client, find_user_preferences, find_book_recommendations
+from services.recommendations import client, find_user_preferences, find_book_recommendations, store_recent_recommendations
 from decorators.error import catch_errors
 from core.auth_core import authorise_user
 import re
@@ -198,9 +198,17 @@ def recommendations():
 
         print(books)
 
-        return {}, 200
+        recs_num = store_recent_recommendations(books, current_user)
 
-    return render_template('recommendations.html', user=current_user)
+        if recs_num < 12:
+            books = find_book_recommendations(preferences, True, (12 - recs_num))
+            final_num = store_recent_recommendations(books, current_user, True)
+
+        return {}, 200
+    
+    recommendations = current_user.recent_recommendations
+
+    return render_template('recommendations.html', user=current_user, recommendations=recommendations)
 
 @app.route('/saved-recommendations')
 @catch_errors
