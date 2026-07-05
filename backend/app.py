@@ -8,7 +8,7 @@ from database.data import db, User, Review
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
 from services.review import user_create_review, user_delete_review, user_edit_review
-from services.recommendations import client, find_user_preferences
+from services.recommendations import client, find_user_preferences, find_book_recommendations
 from decorators.error import catch_errors
 from core.auth_core import authorise_user
 import re
@@ -193,6 +193,10 @@ def recommendations():
 
         preferences = find_user_preferences(reviews_text)
         print(preferences)
+
+        books = find_book_recommendations(preferences)
+
+        print(books)
 
         return {}, 200
 

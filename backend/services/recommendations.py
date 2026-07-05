@@ -1,3 +1,4 @@
+import requests
 from flask_sqlalchemy import SQLAlchemy
 from classes.Error import InputError, AccessError
 from database.data import db, Review, User
@@ -30,8 +31,9 @@ class BookPreferences(BaseModel):
 
 def find_user_preferences(reviews_text):
     prompt = f"""Analyse the following set of a single user's book reviews and ratings. Extract their liked and 
-    disliked: genres, authors, and eras (as in era of literature NOT era of the setting). Prioritise explicit
-    preferences, but also look for implicit preferences within the review body for each book.
+    disliked: genres, authors, and eras (as in era of literature NOT era of the setting - the era should be returned 
+    as a range i.e. 1950 TO 1960). Prioritise explicit preferences, but also look for implicit preferences within the 
+    review body for each book.
     
     Reviews: 
     {reviews_text}"""
@@ -50,7 +52,48 @@ def find_user_preferences(reviews_text):
             response_format=BookPreferences
         )
         preferences = response.choices[0].message.parsed
-        
+
         return preferences
     except:
         raise AccessError("Error extracting reviews")
+
+
+def find_book_recommendations(preferences):
+    if (not preferences.liked_genres) and (not preferences.liked_authors) and (not preferences.liked_eras):
+        raise AccessError("Preferences cannot be extracted! Please increase the detail of your review bodies.")
+    
+    base_url = "https://openlibrary.org/search.json"
+
+    query_params = []
+
+    if preferences.liked_genres:
+        genres = " OR ".join(preferences.liked_genres)
+        genres_string = f"subject:({genres})"
+        query_params.append(genres_string)
+    
+    if preferences.liked_authors:
+        authors = " OR ".join(preferences.liked_authors)
+        authors_string = f"author:({authors})"
+        query_params.append(authors_string)
+    
+    if preferences.liked_eras:
+        eras = []
+        for era in preferences.liked_eras:
+            if "TO" in era:
+                eras.append(f"[{era}]")
+            else:
+                eras.append(era)
+        eras_string = " OR ".join(eras)
+        query_params.append(eras_string)
+    
+    query_string = " AND ".join(query_params)
+
+    full_url = f"{base_url}?q={query_string}"
+
+    print(full_url)
+
+    response = requests.get(full_url)
+
+    data = response.json()
+
+    return data
