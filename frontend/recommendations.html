@@ -67,54 +67,20 @@
             </div>
             <div class="recs-container">
                 <div class="recs-wrapper">
+                    {% if recommendations %}
+                    {% for recommendation in recommendations %}
                     <div class="rec-card">
-                        <p class="dash-title">Test Book 1</p>
-                        <img src="https://t4.ftcdn.net/jpg/03/64/17/57/360_F_364175760_dcXwFAHAjqzVEjBN7tpvSyQmlOe2IEVl.jpg" alt="">
-                        <p class="rec-card-author">Author 1</p>
-                        <p class="rec-card-genre">Genre</p>
-                        <p class="rec-card-summary">A little summary about the book and its storyline maybe including some of the character names but no spoilers.</p>
+                        <p class="dash-title">{{ recommendation.title }}</p>
+                        <img src="https://covers.openlibrary.org/b/olid/{{ recommendation.olid }}.jpg" alt="{{ recommendation.olid }}" alt="">
+                        <p class="rec-card-author">{{ recommendation.author }}</p>
+                        <p class="rec-card-genre">Published: {{ recommendation.published }}</p>
+                        <p class="rec-card-summary">Generated at: {{ recommendation.created_at }}</p>
                         <button type="button" class="save-button">Save Recommendation</button>
                     </div>
-                    <div class="rec-card">
-                        <p class="dash-title">Test Book 1</p>
-                        <img src="https://t4.ftcdn.net/jpg/03/64/17/57/360_F_364175760_dcXwFAHAjqzVEjBN7tpvSyQmlOe2IEVl.jpg" alt="">
-                        <p class="rec-card-author">Author 1</p>
-                        <p class="rec-card-genre">Genre</p>
-                        <p class="rec-card-summary">A little summary about the book and its storyline maybe including some of the character names but no spoilers.</p>
-                        <button type="button" class="save-button">Save Recommendation</button>
-                    </div>
-                    <div class="rec-card">
-                        <p class="dash-title">Test Book 1</p>
-                        <img src="https://t4.ftcdn.net/jpg/03/64/17/57/360_F_364175760_dcXwFAHAjqzVEjBN7tpvSyQmlOe2IEVl.jpg" alt="">
-                        <p class="rec-card-author">Author 1</p>
-                        <p class="rec-card-genre">Genre</p>
-                        <p class="rec-card-summary">A little summary about the book and its storyline maybe including some of the character names but no spoilers.</p>
-                        <button type="button" class="save-button">Save Recommendation</button>
-                    </div>
-                    <div class="rec-card">
-                        <p class="dash-title">Test Book 1</p>
-                        <img src="https://t4.ftcdn.net/jpg/03/64/17/57/360_F_364175760_dcXwFAHAjqzVEjBN7tpvSyQmlOe2IEVl.jpg" alt="">
-                        <p class="rec-card-author">Author 1</p>
-                        <p class="rec-card-genre">Genre</p>
-                        <p class="rec-card-summary">A little summary about the book and its storyline maybe including some of the character names but no spoilers.</p>
-                        <button type="button" class="save-button">Save Recommendation</button>
-                    </div>
-                    <div class="rec-card">
-                        <p class="dash-title">Test Book 1</p>
-                        <img src="https://t4.ftcdn.net/jpg/03/64/17/57/360_F_364175760_dcXwFAHAjqzVEjBN7tpvSyQmlOe2IEVl.jpg" alt="">
-                        <p class="rec-card-author">Author 1</p>
-                        <p class="rec-card-genre">Genre</p>
-                        <p class="rec-card-summary">A little summary about the book and its storyline maybe including some of the character names but no spoilers.</p>
-                        <button type="button" class="save-button">Save Recommendation</button>
-                    </div>
-                    <div class="rec-card">
-                        <p class="dash-title">Test Book 1</p>
-                        <img src="https://t4.ftcdn.net/jpg/03/64/17/57/360_F_364175760_dcXwFAHAjqzVEjBN7tpvSyQmlOe2IEVl.jpg" alt="">
-                        <p class="rec-card-author">Author 1</p>
-                        <p class="rec-card-genre">Genre</p>
-                        <p class="rec-card-summary">A little summary about the book and its storyline maybe including some of the character names but no spoilers.</p>
-                        <button type="button" class="save-button">Save Recommendation</button>
-                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="dash-title">No Current Recommendations</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
