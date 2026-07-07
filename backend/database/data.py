@@ -19,6 +19,8 @@ class User(UserMixin, db.Model):
     session_token = db.Column(db.String(50), nullable=False)
     csrf_token = db.Column(db.String(50), nullable=False)
     reviews = db.relationship('Review', backref='user')
+    recent_recommendations = db.relationship('RecentRecommendation', backref='user')
+    details = db.relationship('UserProfile', backref='user', uselist=False)
     
     def __init__(self, username, email, created_at, password=None, password_hash=None, session_token=None, csrf_token=None, **kwargs):
         
@@ -152,4 +154,108 @@ class Review(db.Model):
             rating=data["rating"],
             review_body=data["review_body"],
             created_at=data["created_at"]
+        )
+
+
+class RecentRecommendation(db.Model):
+    __tablename__ = "recent_recommendations"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_accounts.id'), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
+    author = db.Column(db.Text, nullable=False)
+    olid = db.Column(db.String(80), nullable=False)
+    published = db.Column(db.String(6), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+
+    def __init__(self, user, title, author, olid, published, created_at):
+        self.user = user
+        self.title = title
+        self.author = author
+        self.olid = olid
+        self.published = published
+        self.created_at = created_at
+
+    def __repr__(self):
+        return f"<Recent recommednation for {self.user.username} of {self.title}>"
+    
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+        db.session.add(self)
+        db.session.commit()
+
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "author": self.author,
+            "olid": self.olid,
+            "published": self.published,
+            "created_at": self.created_at
+        }
+    
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            title=data["title"],
+            author=data["author"],
+            olid=data["olid"],
+            published=data["published"],
+            created_at=data["created_at"]
+        )
+    
+
+class UserProfile(db.Model):
+    __tablename__ = "user_profile"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_accounts.id'), nullable=False)
+    darkmode = db.Column(db.Boolean, default=False, nullable=False)
+    liked_authors = db.Column(db.JSON)
+    liked_genres = db.Column(db.JSON)
+    liked_eras = db.Column(db.JSON)
+
+    def __init__(self, user, darkmode, liked_authors, liked_genres, liked_eras):
+        self.user = user
+        self.darkmode = darkmode
+        self.liked_authors = liked_authors
+        self.liked_genres = liked_genres
+        self.liked_eras = liked_eras
+
+    def __repr__(self):
+        return f"<Profile details for {self.user.username}>"
+    
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+        db.session.add(self)
+        db.session.commit()
+
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "darkmode": self.darkmode,
+            "liked_authors": self.liked_authors,
+            "liked_genres": self.liked_genres,
+            "liked_eras": self.liked_eras
+        }
+    
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            darkmode=data["darkmode"],
+            liked_authors=data["liked_authors"],
+            liked_genres=data["liked_genres"],
+            liked_eras=data["liked_eras"]
         )

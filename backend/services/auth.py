@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from classes.Error import InputError, AccessError
-from database.data import User, db
+from database.data import User, db, UserProfile
 from datetime import datetime
 import re
 import html
@@ -70,6 +70,10 @@ def auth_register_user(username, email, password):
     session_token, csrf_token = new_user_instance.initiate_user_session()
     
     new_user_instance.save_to_db()
+
+    new_user_details = UserProfile(new_user_instance, False, None, None, None)
+
+    new_user_details.save_to_db()
 
     return session_token, csrf_token
 
