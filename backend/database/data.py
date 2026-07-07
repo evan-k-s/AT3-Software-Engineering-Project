@@ -164,7 +164,7 @@ class RecentRecommendation(db.Model):
     title = db.Column(db.String(255), nullable=False)
     author = db.Column(db.Text, nullable=False)
     olid = db.Column(db.String(80), nullable=False)
-    published = db.Column(db.String(6), nullable=False)
+    published = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
     def __init__(self, user, title, author, olid, published, created_at):
