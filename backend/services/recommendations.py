@@ -1,7 +1,7 @@
 import requests
 from flask_sqlalchemy import SQLAlchemy
 from classes.Error import InputError, AccessError
-from database.data import db, Review, User, RecentRecommendation
+from database.data import db, Review, User, RecentRecommendation, UserProfile
 from datetime import datetime
 from pydantic import BaseModel
 from openai import OpenAI
@@ -58,7 +58,7 @@ def find_user_preferences(reviews_text):
         raise AccessError("Error extracting reviews")
 
 
-def find_book_recommendations(preferences, no_author=False, limit=12):
+def find_book_recommendations(preferences, user, no_author=False, limit=12):
     if (not preferences.liked_genres) and (not preferences.liked_authors) and (not preferences.liked_eras):
         raise AccessError("Preferences cannot be extracted! Please increase the detail of your review bodies.")
     
@@ -66,15 +66,19 @@ def find_book_recommendations(preferences, no_author=False, limit=12):
 
     query_params = []
 
+    user_details = UserProfile.query.filter_by(user_id=user.id).first()
+
     if preferences.liked_genres:
         genres = " OR ".join(preferences.liked_genres)
         genres_string = f"subject:({genres})"
         query_params.append(genres_string)
+        user_details.update(liked_genres=preferences.liked_genres)
     
     if preferences.liked_authors and not no_author:
         authors = " OR ".join(preferences.liked_authors)
         authors_string = f"author:({authors})"
         query_params.append(authors_string)
+        user_details.update(liked_authors=preferences.liked_authors)
     
     if preferences.liked_eras:
         eras = []
@@ -85,6 +89,7 @@ def find_book_recommendations(preferences, no_author=False, limit=12):
                 eras.append(era)
         eras_string = " OR ".join(eras)
         query_params.append(eras_string)
+        user_details.update(liked_eras=preferences.liked_eras)
     
     query_string = " AND ".join(query_params)
 

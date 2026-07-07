@@ -194,14 +194,14 @@ def recommendations():
         preferences = find_user_preferences(reviews_text)
         print(preferences)
 
-        books = find_book_recommendations(preferences)
+        books = find_book_recommendations(preferences, current_user)
 
         print(books)
 
         recs_num = store_recent_recommendations(books, current_user)
 
         if recs_num < 12:
-            books = find_book_recommendations(preferences, True, (12 - recs_num))
+            books = find_book_recommendations(preferences, current_user, True, (12 - recs_num))
             final_num = store_recent_recommendations(books, current_user, True)
 
         return {}, 200
