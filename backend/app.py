@@ -2,11 +2,13 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from openai import OpenAI
 from dotenv import load_dotenv
-from database.data import db, User, Review
+from database.data import db, User, Review, UserProfile, RecentRecommendation
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
 from services.review import user_create_review, user_delete_review, user_edit_review
+from services.recommendations import client, find_user_preferences, find_book_recommendations, store_recent_recommendations, user_save_recommendation, user_delete_recommendation
 from decorators.error import catch_errors
 from core.auth_core import authorise_user
 import re
@@ -33,6 +35,7 @@ secret_key = os.environ['SECRET_KEY']
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{db_user}:{db_password}@localhost/{db_name}"
 app.config['SECRET_KEY'] = secret_key
 db.init_app(app)
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -173,17 +176,116 @@ def edit_review(id, olid):
     return render_template('edit_review.html', user=current_user, review=review)
 
 
-@app.route('/recommendations')
+@app.route('/recommendations', methods=['GET', 'POST'])
 @catch_errors
 @login_required
 def recommendations():
-    return render_template('recommendations.html', user=current_user)
+    if request.method == "POST":
+        reviews = Review.query.filter_by(user_id=current_user.id).all()
+
+        reviews_text_array = []
+
+        for review in reviews:
+            review_text = f"Title: {review.title}\nAuthor: {review.author}\nRating: {review.rating}/5\n\nBody: {review.review_body}"
+            reviews_text_array.append(review_text)
+        
+        reviews_text = "\n\n--- new review ---\n\n".join(reviews_text_array)
+
+        preferences = find_user_preferences(reviews_text)
+        print(preferences)
+
+        books = find_book_recommendations(preferences, current_user)
+
+        print(books)
+
+        recs_num = store_recent_recommendations(books, current_user)
+
+        if recs_num < 12:
+            books = find_book_recommendations(preferences, current_user, True, (12 - recs_num))
+            final_num = store_recent_recommendations(books, current_user, True)
+
+        return {}, 200
+    
+    recommendations = current_user.recent_recommendations
+
+    authors_details = RecentRecommendation.query.with_entities(RecentRecommendation.author).filter_by(user_id=current_user.id).distinct().all()
+    authors = [row.author for row in authors_details]
+
+    oldest = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).order_by(RecentRecommendation.published.asc()).first()
+    oldest_pub = oldest.published
+    newest = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).order_by(RecentRecommendation.published.desc()).first()
+    newest_pub = newest.published
+
+
+    return render_template('recommendations.html', user=current_user, recommendations=recommendations, authors=authors, oldest=oldest_pub, newest=newest_pub, min=oldest_pub, max=newest_pub)
+
+
+@app.route('/recommendations/filter/<authors>/<min_era>/<max_era>', methods=['GET', 'POST'])
+@catch_errors
+@login_required
+def filter_recommendations(authors, min_era, max_era):
+    
+    if not authors == "all":
+        authors = authors.split(",")
+        recommendations = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).filter(RecentRecommendation.published >= min_era).filter(RecentRecommendation.published <= max_era).filter(RecentRecommendation.author.in_(authors)).all()
+    else:
+        recommendations = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).filter(RecentRecommendation.published >= min_era).filter(RecentRecommendation.published <= max_era).all()
+    
+    authors_details = RecentRecommendation.query.with_entities(RecentRecommendation.author).filter_by(user_id=current_user.id).distinct().all()
+    all_authors = [row.author for row in authors_details]
+
+    oldest = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).order_by(RecentRecommendation.published.asc()).first()
+    oldest_pub = oldest.published
+    newest = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).order_by(RecentRecommendation.published.desc()).first()
+    newest_pub = newest.published
+
+    return render_template('recommendations.html', user=current_user, recommendations=recommendations, authors=all_authors, oldest=oldest_pub, newest=newest_pub, min=min_era, max=max_era)
+
+
+@app.route('/save-recommendation', methods=['GET', 'POST'])
+@catch_errors
+@login_required
+def save_recommendation():
+    if request.method == 'POST':
+        data = request.get_json()
+        if "recommendation_id" in data:
+            recommendation_id = data["recommendation_id"]
+
+            user = current_user
+
+            user_save_recommendation(recommendation_id, user)
+
+            return {}, 200
+        else:
+            raise AccessError("Review does not exist.")
+
+
+@app.route('/delete-recommendation', methods=['GET', 'POST'])
+@catch_errors
+@login_required
+def delete_recommendation():
+    if request.method == 'POST':
+        data = request.get_json()
+        if "recommendation_id" in data:
+            recommendation_id = data["recommendation_id"]
+
+            user = current_user
+
+            user_delete_recommendation(user, recommendation_id)
+
+            return {}, 200
+        else:
+            raise AccessError("Recommendation does not exist.")
+
+
 
 @app.route('/saved-recommendations')
 @catch_errors
 @login_required
 def saved_recommendations():
-    return render_template('saved_recommendations.html', user=current_user)
+    recommendations = current_user.saved_recommendations
+
+    return render_template('saved_recommendations.html', user=current_user, recommendations=recommendations)
 
 @app.route('/login', methods=['GET', 'POST'])
 @catch_errors
@@ -251,4 +353,16 @@ def register():
 def logout():
     auth_logout_user(current_user.session_token)
     logout_user()
-    
+    return {}, 200
+
+
+@login_manager.user_loader
+@catch_errors
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)    
