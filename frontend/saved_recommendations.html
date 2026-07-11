@@ -35,7 +35,7 @@
                         <p class="rec-card-author">{{ recommendation.author }}</p>
                         <p class="rec-card-genre">Published: {{ recommendation.published }}</p>
                         <p class="rec-card-summary">Saved at: {{ recommendation.saved_at }}</p>
-                        <button type="button" class="save-button">Delete Recommendation</button>
+                        <button type="button" class="save-button" onclick="deleteRecommendation('{{ recommendation.id }}')">Delete Recommendation</button>
                     </div>
                     {% endfor %}
                     {% else %}
