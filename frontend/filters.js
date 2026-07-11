@@ -1,6 +1,32 @@
 const genreSelect = document.getElementById('genre-select');
+const selectedGenres = document.getElementById('selectedGenres');
+const dropdown = document.getElementById('dropdown');
 
-const selectedValues = new Set()
+let selectedValues = new Set()
+
+
+let eraGap = 1;
+
+const rangeInput = document.querySelectorAll(".range-input input"),
+eraInput = document.querySelectorAll(".fields input"),
+progress = document.querySelector(".slider .progress");
+
+let era_min = rangeInput[0].value;
+let era_max = rangeInput[1].value;
+
+progress.style.left = ((era_min - rangeInput[0].min) / (rangeInput[0].max - rangeInput[0].min)) * 100 + "%";
+progress.style.right = 100 - ((era_max - rangeInput[1].min) / (rangeInput[1].max - rangeInput[1].min)) * 100 + "%";
+
+
+export function findFilters() {
+    const params = {
+        authors: Array.from(selectedValues),
+        min_era: era_min,
+        max_era: era_max
+    }
+
+    return params;
+}
 
 genreSelect.addEventListener('click', () => {
     genreSelect.classList.toggle('open');
@@ -43,11 +69,7 @@ document.addEventListener('click', (e) => {
     }
 })
 
-let eraGap = 1;
 
-const rangeInput = document.querySelectorAll(".range-input input"),
-eraInput = document.querySelectorAll(".fields input"),
-progress = document.querySelector(".slider .progress");
 
 rangeInput.forEach(input => {
     input.addEventListener("input", (e) => {
