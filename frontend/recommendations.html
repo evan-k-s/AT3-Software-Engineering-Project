@@ -114,8 +114,14 @@
                 const params = findFilters();
 
                 let rawURL = "{{ url_for('filter_recommendations', authors='AUTHORS', min_era='MIN', max_era='MAX') }}";
-                let finalURL = rawURL.replace('AUTHORS', params.authors).replace('MIN', params.min_era).replace('MAX', params.max_era);
+                let finalURL;
 
+                if (params.authors.length > 0) {
+                    finalURL = rawURL.replace('AUTHORS', params.authors).replace('MIN', params.min_era).replace('MAX', params.max_era);
+                } else {
+                    finalURL = rawURL.replace('AUTHORS', 'all').replace('MIN', params.min_era).replace('MAX', params.max_era);
+                }
+                
                 window.location.href = finalURL;
             })
         </script>

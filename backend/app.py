@@ -224,9 +224,9 @@ def recommendations():
 @catch_errors
 @login_required
 def filter_recommendations(authors, min_era, max_era):
-    authors = authors.split(",")
-
-    if authors:
+    
+    if not authors == "all":
+        authors = authors.split(",")
         recommendations = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).filter(RecentRecommendation.published >= min_era).filter(RecentRecommendation.published <= max_era).filter(RecentRecommendation.author.in_(authors)).all()
     else:
         recommendations = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).filter(RecentRecommendation.published >= min_era).filter(RecentRecommendation.published <= max_era).all()
