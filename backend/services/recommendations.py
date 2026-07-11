@@ -155,3 +155,9 @@ def user_save_recommendation(recommendation_id, user):
         saved_recommendation = SavedRecommendation(user, title, author, olid, published, saved_at)
 
         saved_recommendation.save_to_db()
+
+
+def user_delete_recommendation(user, id):
+    recommendation = SavedRecommendation.query.filter_by(user_id=user.id, id=id).first()
+    db.session.delete(recommendation)
+    db.session.commit()

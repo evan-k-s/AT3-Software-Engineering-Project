@@ -8,7 +8,7 @@ from database.data import db, User, Review, UserProfile, RecentRecommendation
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
 from services.review import user_create_review, user_delete_review, user_edit_review
-from services.recommendations import client, find_user_preferences, find_book_recommendations, store_recent_recommendations, user_save_recommendation
+from services.recommendations import client, find_user_preferences, find_book_recommendations, store_recent_recommendations, user_save_recommendation, user_delete_recommendation
 from decorators.error import catch_errors
 from core.auth_core import authorise_user
 import re
@@ -258,6 +258,25 @@ def save_recommendation():
             return {}, 200
         else:
             raise AccessError("Review does not exist.")
+
+
+@app.route('/delete-recommendation', methods=['GET', 'POST'])
+@catch_errors
+@login_required
+def delete_recommendation():
+    if request.method == 'POST':
+        data = request.get_json()
+        if "recommendation_id" in data:
+            recommendation_id = data["recommendation_id"]
+
+            user = current_user
+
+            user_delete_recommendation(user, recommendation_id)
+
+            return {}, 200
+        else:
+            raise AccessError("Recommendation does not exist.")
+
 
 
 @app.route('/saved-recommendations')
