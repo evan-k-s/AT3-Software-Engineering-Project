@@ -1,7 +1,7 @@
 import requests
 from flask_sqlalchemy import SQLAlchemy
 from classes.Error import InputError, AccessError
-from database.data import db, Review, User, RecentRecommendation, UserProfile
+from database.data import db, Review, User, RecentRecommendation, SavedRecommendation, UserProfile
 from datetime import datetime
 from pydantic import BaseModel
 from openai import OpenAI
@@ -135,3 +135,29 @@ def store_recent_recommendations(books, user, combine_recs=False):
         recs_num += 1
 
     return recs_num
+
+
+def user_save_recommendation(recommendation_id, user):
+    recent_recommendation = RecentRecommendation.query.filter_by(id=recommendation_id).first()
+
+    if recent_recommendation is not None:
+        title = recent_recommendation.title
+        author = recent_recommendation.author
+        olid = recent_recommendation.olid
+        published = recent_recommendation.published
+        saved_at = datetime.now()
+
+        exists = User.query.join(User.saved_recommendations).filter(User.id==user.id, SavedRecommendation.olid==olid).first() is not None
+
+        if exists:
+            raise AccessError("Already saved!")
+
+        saved_recommendation = SavedRecommendation(user, title, author, olid, published, saved_at)
+
+        saved_recommendation.save_to_db()
+
+
+def user_delete_recommendation(user, id):
+    recommendation = SavedRecommendation.query.filter_by(user_id=user.id, id=id).first()
+    db.session.delete(recommendation)
+    db.session.commit()

@@ -8,7 +8,7 @@ from database.data import db, User, Review, UserProfile, RecentRecommendation
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
 from services.review import user_create_review, user_delete_review, user_edit_review
-from services.recommendations import client, find_user_preferences, find_book_recommendations, store_recent_recommendations
+from services.recommendations import client, find_user_preferences, find_book_recommendations, store_recent_recommendations, user_save_recommendation, user_delete_recommendation
 from decorators.error import catch_errors
 from core.auth_core import authorise_user
 import re
@@ -242,12 +242,50 @@ def filter_recommendations(authors, min_era, max_era):
     return render_template('recommendations.html', user=current_user, recommendations=recommendations, authors=all_authors, oldest=oldest_pub, newest=newest_pub, min=min_era, max=max_era)
 
 
+@app.route('/save-recommendation', methods=['GET', 'POST'])
+@catch_errors
+@login_required
+def save_recommendation():
+    if request.method == 'POST':
+        data = request.get_json()
+        if "recommendation_id" in data:
+            recommendation_id = data["recommendation_id"]
+
+            user = current_user
+
+            user_save_recommendation(recommendation_id, user)
+
+            return {}, 200
+        else:
+            raise AccessError("Review does not exist.")
+
+
+@app.route('/delete-recommendation', methods=['GET', 'POST'])
+@catch_errors
+@login_required
+def delete_recommendation():
+    if request.method == 'POST':
+        data = request.get_json()
+        if "recommendation_id" in data:
+            recommendation_id = data["recommendation_id"]
+
+            user = current_user
+
+            user_delete_recommendation(user, recommendation_id)
+
+            return {}, 200
+        else:
+            raise AccessError("Recommendation does not exist.")
+
+
 
 @app.route('/saved-recommendations')
 @catch_errors
 @login_required
 def saved_recommendations():
-    return render_template('saved_recommendations.html', user=current_user)
+    recommendations = current_user.saved_recommendations
+
+    return render_template('saved_recommendations.html', user=current_user, recommendations=recommendations)
 
 @app.route('/login', methods=['GET', 'POST'])
 @catch_errors

@@ -80,7 +80,7 @@
                         <p class="rec-card-author">{{ recommendation.author }}</p>
                         <p class="rec-card-genre">Published: {{ recommendation.published }}</p>
                         <p class="rec-card-summary">Generated at: {{ recommendation.created_at }}</p>
-                        <button type="button" class="save-button">Save Recommendation</button>
+                        <button type="button" class="save-button" onclick="saveRecommendation('{{ recommendation.id }}')">Save Recommendation</button>
                     </div>
                     {% endfor %}
                     {% else %}
@@ -128,6 +128,7 @@
         <script type="module" src="{{ url_for('static', filename='filters.js') }}" defer></script>
         <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
         <script type="module" src="{{ url_for('static', filename='src/services/logout.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='src/services/recommendation.js') }}" defer></script>
 
     </body>
 </html>

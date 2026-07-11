@@ -20,6 +20,7 @@ class User(UserMixin, db.Model):
     csrf_token = db.Column(db.String(50), nullable=False)
     reviews = db.relationship('Review', backref='user')
     recent_recommendations = db.relationship('RecentRecommendation', backref='user')
+    saved_recommendations = db.relationship('SavedRecommendation', backref='user')
     details = db.relationship('UserProfile', backref='user', uselist=False)
     
     def __init__(self, username, email, created_at, password=None, password_hash=None, session_token=None, csrf_token=None, **kwargs):
@@ -176,7 +177,7 @@ class RecentRecommendation(db.Model):
         self.created_at = created_at
 
     def __repr__(self):
-        return f"<Recent recommednation for {self.user.username} of {self.title}>"
+        return f"<Recent recommendation for {self.user.username} of {self.title}>"
     
     def update(self, **kwargs):
         for key, value in kwargs.items():
@@ -210,6 +211,61 @@ class RecentRecommendation(db.Model):
             created_at=data["created_at"]
         )
     
+
+class SavedRecommendation(db.Model):
+    __tablename__ = "saved_recommendations"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_accounts.id'), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
+    author = db.Column(db.Text, nullable=False)
+    olid = db.Column(db.String(80), nullable=False)
+    published = db.Column(db.Integer, nullable=False)
+    saved_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+
+    def __init__(self, user, title, author, olid, published, saved_at):
+        self.user = user
+        self.title = title
+        self.author = author
+        self.olid = olid
+        self.published = published
+        self.saved_at = saved_at
+
+    def __repr__(self):
+        return f"<Saved recommendation for {self.user.username} of {self.title}>"
+    
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+        db.session.add(self)
+        db.session.commit()
+
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "author": self.author,
+            "olid": self.olid,
+            "published": self.published,
+            "saved_at": self.saved_at
+        }
+    
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            title=data["title"],
+            author=data["author"],
+            olid=data["olid"],
+            published=data["published"],
+            saved_at=data["saved_at"]
+        )
+    
+
 
 class UserProfile(db.Model):
     __tablename__ = "user_profile"
