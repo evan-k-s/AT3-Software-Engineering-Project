@@ -1,6 +1,32 @@
 const genreSelect = document.getElementById('genre-select');
+const selectedGenres = document.getElementById('selectedGenres');
+const dropdown = document.getElementById('dropdown');
 
-const selectedValues = new Set()
+let selectedValues = new Set()
+
+
+let eraGap = 1;
+
+const rangeInput = document.querySelectorAll(".range-input input"),
+eraInput = document.querySelectorAll(".fields input"),
+progress = document.querySelector(".slider .progress");
+
+let era_min = rangeInput[0].value;
+let era_max = rangeInput[1].value;
+
+progress.style.left = ((era_min - rangeInput[0].min) / (rangeInput[0].max - rangeInput[0].min)) * 100 + "%";
+progress.style.right = 100 - ((era_max - rangeInput[1].min) / (rangeInput[1].max - rangeInput[1].min)) * 100 + "%";
+
+
+export function findFilters() {
+    const params = {
+        authors: Array.from(selectedValues),
+        min_era: era_min,
+        max_era: era_max
+    }
+
+    return params;
+}
 
 genreSelect.addEventListener('click', () => {
     genreSelect.classList.toggle('open');
@@ -28,7 +54,7 @@ selectedGenres.addEventListener('click', (e) => {
     if (e.target.dataset.remove) {
         if (selectedValues.size == 1) {
             const title = document.getElementById('dropdown-arrow');
-            title.innerHTML = "&#9662; Filter Genres";
+            title.innerHTML = "&#9662; Filter Authors";
         };
 
         const valueToRemove = e.target.dataset.remove;
@@ -37,12 +63,13 @@ selectedGenres.addEventListener('click', (e) => {
     }
 })
 
+document.addEventListener('click', (e) => {
+    if (!genreSelect.contains(e.target)) {
+        genreSelect.classList.remove('open');
+    }
+})
 
-let eraGap = 1;
 
-const rangeInput = document.querySelectorAll(".range-input input"),
-eraInput = document.querySelectorAll(".fields input"),
-progress = document.querySelector(".slider .progress");
 
 rangeInput.forEach(input => {
     input.addEventListener("input", (e) => {
@@ -60,6 +87,27 @@ rangeInput.forEach(input => {
             eraInput[1].value = maxVal;
             progress.style.left = ((minVal - rangeInput[0].min) / (rangeInput[0].max - rangeInput[0].min)) * 100 + "%";
             progress.style.right = 100 - ((maxVal - rangeInput[1].min) / (rangeInput[1].max - rangeInput[1].min)) * 100 + "%";
+            era_min = minVal;
+            era_max = maxVal;
+        };
+    });
+});
+
+eraInput.forEach(input => {
+    input.addEventListener("input", (e) => {
+        let minVal = parseInt(eraInput[0].value),
+        maxVal = parseInt(eraInput[1].value);
+
+        if ((maxVal - minVal >= eraGap) && (maxVal <= rangeInput[1].max) && (minVal >= rangeInput[0].min)) {
+            if (e.target.className == "era-min") {
+                rangeInput[0].value = minVal;
+                progress.style.left = ((minVal - rangeInput[0].min) / (rangeInput[0].max - rangeInput[0].min)) * 100 + "%";
+                era_min = minVal;
+            } else {
+                rangeInput[1].value = maxVal;
+                progress.style.right = 100 - ((maxVal - rangeInput[1].min) / (rangeInput[1].max - rangeInput[1].min)) * 100 + "%";
+                era_max = maxVal;
+            }
         };
     });
 });

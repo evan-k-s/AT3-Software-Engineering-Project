@@ -26,45 +26,50 @@
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M565-395q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35Zm-226.5 56.5Q280-397 280-480t58.5-141.5Q397-680 480-680t141.5 58.5Q680-563 680-480t-58.5 141.5Q563-280 480-280t-141.5-58.5ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Zm326-268Z"/></svg>
             </button>
             <button type="button" class="dash-button" id="generate-recs">Generate New Recommendations</button>
+            {% if recommendations %}
             <div class="recs-filters">
                 <div class="genres"> 
-                    <p>Genre Filter</p>
+                    <p>Authors Filter</p>
                     <div class="genre-select" id="genre-select">
-                        <div class="selected-genres" id="selectedGenres">
-                            <div class="dropdown-arrow" id="dropdown-arrow">&#9662; Filter Genres</div>
-                            <div class="dropdown" id="dropdown">
-                                <div data-value="scifi">Sci-Fi</div>
-                                <div data-value="fantasy">Fantasy</div>
-                                <div data-value="historical">Historical</div>
-                                <div data-value="romance">Romance</div>
-                                <div data-value="crime">Crime</div>
-                                <div data-value="nonfiction">Non-Fiction</div>
-                            </div>
+                        <div class="selected-genres" id="selectedGenres"></div>
+                        <div class="dropdown-arrow" id="dropdown-arrow">&#9662; Filter Authors</div>
+                        <div class="dropdown" id="dropdown">
+                            {% if authors %}
+                            {% for author in authors %}
+                            <div data-value="{{ author }}">{{ author }}</div>
+                            {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
                 <div class="era-select">
                     <p>Era Range Filter</p>
                     <div class="fields">
+                        {% if oldest %}
                         <div class="field">
                             <span>Min</span>
-                            <input type="number" class="era-min" value="1950">
+                            <input type="number" class="era-min" value="{{ min }}">
                         </div>
+                        {% endif %}
+                        {% if newest %}
                         <div class="separator">-</div>
                         <div class="field">
                             <span>Max</span>
-                            <input type="number" class="era-max" value="2010">
+                            <input type="number" class="era-max" value="{{ max }}">
                         </div>
+                        {% endif %}
                     </div>
                     <div class="slider">
                         <div class="progress"></div>
                     </div>
                     <div class="range-input">
-                        <input type="range" class="range-min" min="1425" max="2025" value="1950">
-                        <input type="range" class="range-max" min="1425" max="2025" value="2010">
+                        <input type="range" class="range-min" min="{{ oldest }}" max="{{ newest }}" value="{{ min }}">
+                        <input type="range" class="range-max" min="{{ oldest }}" max="{{ newest }}" value="{{ max }}">
                     </div>
                 </div>
             </div>
+            <button type="button" class="dash-button" id="filter-recs">Filter</button>
+            {% endif %}
             <div class="recs-container">
                 <div class="recs-wrapper">
                     {% if recommendations %}
@@ -88,6 +93,7 @@
         <script type="module">
             import { handleTokens } from "{{ url_for('static', filename='src/services/auth.js') }}";
             import { requestBackend } from "{{ url_for('static', filename='src/services/api.js') }}";
+            import { findFilters } from "{{ url_for('static', filename='filters.js') }}";
             
             const session_token = "{{ request.cookies.get('session_token') }}";
             const csrf_token = "{{ request.cookies.get('csrf_token') }}";
@@ -103,8 +109,23 @@
                 await requestBackend("POST", "recommendations", tokens, null, null);
                 window.location.reload();
             });
+
+            document.getElementById('filter-recs').addEventListener('click', async () => {
+                const params = findFilters();
+
+                let rawURL = "{{ url_for('filter_recommendations', authors='AUTHORS', min_era='MIN', max_era='MAX') }}";
+                let finalURL;
+
+                if (params.authors.length > 0) {
+                    finalURL = rawURL.replace('AUTHORS', params.authors).replace('MIN', params.min_era).replace('MAX', params.max_era);
+                } else {
+                    finalURL = rawURL.replace('AUTHORS', 'all').replace('MIN', params.min_era).replace('MAX', params.max_era);
+                }
+                
+                window.location.href = finalURL;
+            })
         </script>
-        <script src="filters.js" defer></script>
+        <script type="module" src="{{ url_for('static', filename='filters.js') }}" defer></script>
         <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
         <script type="module" src="{{ url_for('static', filename='src/services/logout.js') }}" defer></script>
 

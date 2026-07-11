@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from openai import OpenAI
 from dotenv import load_dotenv
-from database.data import db, User, Review
+from database.data import db, User, Review, UserProfile, RecentRecommendation
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
 from services.review import user_create_review, user_delete_review, user_edit_review
@@ -208,7 +208,40 @@ def recommendations():
     
     recommendations = current_user.recent_recommendations
 
-    return render_template('recommendations.html', user=current_user, recommendations=recommendations)
+    authors_details = RecentRecommendation.query.with_entities(RecentRecommendation.author).filter_by(user_id=current_user.id).distinct().all()
+    authors = [row.author for row in authors_details]
+
+    oldest = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).order_by(RecentRecommendation.published.asc()).first()
+    oldest_pub = oldest.published
+    newest = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).order_by(RecentRecommendation.published.desc()).first()
+    newest_pub = newest.published
+
+
+    return render_template('recommendations.html', user=current_user, recommendations=recommendations, authors=authors, oldest=oldest_pub, newest=newest_pub, min=oldest_pub, max=newest_pub)
+
+
+@app.route('/recommendations/filter/<authors>/<min_era>/<max_era>', methods=['GET', 'POST'])
+@catch_errors
+@login_required
+def filter_recommendations(authors, min_era, max_era):
+    
+    if not authors == "all":
+        authors = authors.split(",")
+        recommendations = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).filter(RecentRecommendation.published >= min_era).filter(RecentRecommendation.published <= max_era).filter(RecentRecommendation.author.in_(authors)).all()
+    else:
+        recommendations = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).filter(RecentRecommendation.published >= min_era).filter(RecentRecommendation.published <= max_era).all()
+    
+    authors_details = RecentRecommendation.query.with_entities(RecentRecommendation.author).filter_by(user_id=current_user.id).distinct().all()
+    all_authors = [row.author for row in authors_details]
+
+    oldest = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).order_by(RecentRecommendation.published.asc()).first()
+    oldest_pub = oldest.published
+    newest = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).order_by(RecentRecommendation.published.desc()).first()
+    newest_pub = newest.published
+
+    return render_template('recommendations.html', user=current_user, recommendations=recommendations, authors=all_authors, oldest=oldest_pub, newest=newest_pub, min=min_era, max=max_era)
+
+
 
 @app.route('/saved-recommendations')
 @catch_errors
