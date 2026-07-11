@@ -588,6 +588,7 @@ a {
 
 .recs-filters {
     margin-top: 20px;
+    margin-bottom: 10px;
     width: 550px;
     height: auto;
     background-color: var(--secondary-background);
@@ -639,6 +640,7 @@ a {
     border-top: 1px solid var(--accent-colour);
     padding-top: 10px;
     padding-bottom: 10px;
+    cursor: pointer;
 }
 
 .dropdown div:last-child {
@@ -651,14 +653,20 @@ a {
 
 .dropdown-arrow {
     font-size: 0.75rem;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
 }
 
 .selected-genres {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-    min-width: 30px;
+    min-height: 30px;
     width: 100%;
+    margin-left: 15px;
 }
 
 .selected-genres span {
@@ -674,6 +682,7 @@ a {
 
 .selected-genres span i {
     cursor: pointer;
+    left: 10px;
 }
 
 /* Era Filters */
