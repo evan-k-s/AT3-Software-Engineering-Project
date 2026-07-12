@@ -72,39 +72,7 @@
                 {% endif %}
                 <div class="fav-author">
                     <p class="dash-title">Favourite Authors:</p>
-                    <div class="h-scroller">
-                        <div class="author-card">
-                            <p class="review-card-author">Author 1</p>
-                            <p>Books: </p>
-                            <ul>
-                                <li>Book 1</li>
-                                <li>Book 2</li>
-                            </ul>
-                        </div>
-                        <div class="author-card">
-                            <p class="review-card-author">Author 1</p>
-                            <p>Books: </p>
-                            <ul>
-                                <li>Book 1</li>
-                                <li>Book 2</li>
-                            </ul>
-                        </div>
-                        <div class="author-card">
-                            <p class="review-card-author">Author 1</p>
-                            <p>Books: </p>
-                            <ul>
-                                <li>Book 1</li>
-                                <li>Book 2</li>
-                            </ul>
-                        </div>
-                        <div class="author-card">
-                            <p class="review-card-author">Author 1</p>
-                            <p>Books: </p>
-                            <ul>
-                                <li>Book 1</li>
-                                <li>Book 2</li>
-                            </ul>
-                        </div>
+                    <div class="h-scroller" id="authorsContainer">
                     </div>
                 </div>
                 <div class="next-read">
@@ -133,6 +101,44 @@
             const csrf_token = "{{ request.cookies.get('csrf_token') }}";
             const user = "{{ current_user.username }}";
             await handleTokens(session_token, csrf_token, user);
+
+            const authorsContainer = document.getElementById('authorsContainer');
+
+            // Commented out to avoid errors appearing - STILL WORKS WITH COMMENTS
+            //{% if profile.liked_authors %}
+                //{% for author in profile.liked_authors %}
+                    const authorContent = document.createElement("div");
+                    const apiUrl = `https://openlibrary.org/search/authors.json?q=${encodeURIComponent('{{ author }}')}&limit=1`;
+                    const authorResponse = await fetch(apiUrl);
+                    if (!authorResponse.ok) {
+                        throw new Error("Failed to fetch data");
+                    }
+                    const data = await authorResponse.json();
+                    const authorResult = data.docs;
+                    const authorKey = authorResult[0].key;
+                    const worksURL = `https://openlibrary.org/authors/${authorKey}/works.json?limit=3`;
+                    const worksResponse = await fetch(worksURL);
+                    if (!worksResponse.ok) {
+                        throw new Error("Failed to fetch data");
+                    }
+                    const worksData = await worksResponse.json();
+                    const works = worksData.entries;
+
+                    console.log(works)
+
+                    const booksul = document.createElement('ul');
+                    works.forEach(work => {
+                        const bookli = document.createElement('li');
+                        bookli.textContent = work.title;
+                        booksul.appendChild(bookli);
+                    })
+                    authorContent.classList.add("author-card");
+                    authorContent.innerHTML = `<p class="fav-author-name">{{ author }}</p>
+                            <p>Some of their titles... </p>`;
+                    authorContent.appendChild(booksul);
+                    authorsContainer.appendChild(authorContent);
+                //{% endfor %}
+            //{% endif %}
         </script>
 
         <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
