@@ -48,17 +48,28 @@
 
             <div class="profile-dash">
                 <h2>About {{ user.username }}</h2>
+                {% if profile %}
                 <div class="fav-genre">
                     <p class="dash-title">Favourite Genres: </p>
-                    <div class="tag"><p>Genre 1</p></div>
-                    <div class="tag"><p>Genre 2</p></div>
-                    <div class="tag"><p>Genre 3</p></div>
+                    {% if profile.liked_genres %}
+                    {% for genre in profile.liked_genres %}
+                    <div class="tag"><p>{{ genre }}</p></div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="dash-empty">No liked genres detected! Please write some more reviews.</p>
+                    {% endif %}
                 </div>
                 <div class="fav-era">
                     <p class="dash-title">Favourite Eras: </p>
-                    <div class="tag"><p>Early 1900s</p></div>
-                    <div class="tag"><p>Late 1800s</p></div>
+                    {% if profile.liked_eras %}
+                    {% for era in profile.liked_eras %}
+                    <div class="tag"><p>{{ era }}</p></div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="dash-empty">No liked eras detected! Please write some more reviews.</p>
+                    {% endif %}
                 </div>
+                {% endif %}
                 <div class="fav-author">
                     <p class="dash-title">Favourite Authors:</p>
                     <div class="h-scroller">
@@ -99,21 +110,17 @@
                 <div class="next-read">
                     <p class="dash-title">Next Read: </p>
                     <div class="v-scroller">
+                        {% if saved_recommendations %}
+                        {% for recommendation in saved_recommendations %}
                         <div class="next-read-card">
-                            <p class="review-card-author">Next Read Title</p>
-                            <img src="https://img.freepik.com/premium-vector/gold-ornament-dark-background-can-be-used-as-invitation-card-book-cover-vector-illustration_443748-881.jpg" alt="">
-                            <p class="next-read-author">Author</p>
+                            <p class="review-card-author">{{ recommendation.title }}</p>
+                            <img src="https://covers.openlibrary.org/b/olid/{{ recommendation.olid }}.jpg" alt="{{ recommendation.olid }}" alt="">
+                            <p class="next-read-author">{{ recommendation.author }}</p>
                         </div>
-                        <div class="next-read-card">
-                            <p class="review-card-author">Next Read Title</p>
-                            <img src="https://img.freepik.com/premium-vector/gold-ornament-dark-background-can-be-used-as-invitation-card-book-cover-vector-illustration_443748-881.jpg" alt="">
-                            <p class="next-read-author">Author</p>
-                        </div>
-                        <div class="next-read-card">
-                            <p class="review-card-author">Next Read Title</p>
-                            <img src="https://img.freepik.com/premium-vector/gold-ornament-dark-background-can-be-used-as-invitation-card-book-cover-vector-illustration_443748-881.jpg" alt="">
-                            <p class="next-read-author">Author</p>
-                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <p class="dash-empty">No saved recommendations! Please save some recommendations to display next read.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>

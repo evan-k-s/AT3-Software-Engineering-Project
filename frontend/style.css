@@ -169,6 +169,11 @@ a {
     font-style: italic;
 }
 
+.dash-empty {
+    font-size: 1.15rem;
+    font-style: italic;
+}
+
 .h-scroller {
     display: grid;
     gap: 2%;
