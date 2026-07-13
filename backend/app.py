@@ -101,7 +101,8 @@ def dashboard():
 @login_required
 def reviews():
     reviews = current_user.reviews
-    return render_template('reviews.html', user=current_user, reviews=reviews)
+    profile = current_user.details
+    return render_template('reviews.html', user=current_user, reviews=reviews, profile=profile)
 
 @app.route('/create-review', methods=['GET', 'POST'])
 @catch_errors
@@ -124,8 +125,10 @@ def create_reviews():
         else:
             msg = "Missing required fields for review."
             raise AccessError("Missing required fields for review.")
+    
+    profile = current_user.details
 
-    return render_template('create_review.html', user=current_user)
+    return render_template('create_review.html', user=current_user, profile=profile)
 
 
 @app.route('/delete-review', methods=['GET', 'POST'])
@@ -151,7 +154,8 @@ def delete_review():
 @login_required
 def view_review(id, olid):
     review = Review.query.filter_by(user_id=current_user.id, id=id).first()
-    return render_template('view_review.html', user=current_user, review=review)
+    profile = current_user.details
+    return render_template('view_review.html', user=current_user, review=review, profile=profile)
 
 
 @app.route('/edit-review/<int:id>/<olid>', methods=['GET', 'POST'])
@@ -174,8 +178,9 @@ def edit_review(id, olid):
             raise AccessError("Missing required fields: cannot edit review!")
     
     review = Review.query.filter_by(user_id=current_user.id, id=id).first()
+    profile = current_user.details
 
-    return render_template('edit_review.html', user=current_user, review=review)
+    return render_template('edit_review.html', user=current_user, review=review, profile=profile)
 
 
 @app.route('/recommendations', methods=['GET', 'POST'])
@@ -218,8 +223,9 @@ def recommendations():
     newest = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).order_by(RecentRecommendation.published.desc()).first()
     newest_pub = newest.published
 
+    profile = current_user.details
 
-    return render_template('recommendations.html', user=current_user, recommendations=recommendations, authors=authors, oldest=oldest_pub, newest=newest_pub, min=oldest_pub, max=newest_pub)
+    return render_template('recommendations.html', user=current_user, recommendations=recommendations, profile=profile, authors=authors, oldest=oldest_pub, newest=newest_pub, min=oldest_pub, max=newest_pub)
 
 
 @app.route('/recommendations/filter/<authors>/<min_era>/<max_era>', methods=['GET', 'POST'])
@@ -241,7 +247,9 @@ def filter_recommendations(authors, min_era, max_era):
     newest = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).order_by(RecentRecommendation.published.desc()).first()
     newest_pub = newest.published
 
-    return render_template('recommendations.html', user=current_user, recommendations=recommendations, authors=all_authors, oldest=oldest_pub, newest=newest_pub, min=min_era, max=max_era)
+    profile = current_user.details
+
+    return render_template('recommendations.html', user=current_user, recommendations=recommendations, profile=profile, authors=all_authors, oldest=oldest_pub, newest=newest_pub, min=min_era, max=max_era)
 
 
 @app.route('/save-recommendation', methods=['GET', 'POST'])
@@ -286,8 +294,24 @@ def delete_recommendation():
 @login_required
 def saved_recommendations():
     recommendations = current_user.saved_recommendations
+    profile = current_user.details
 
-    return render_template('saved_recommendations.html', user=current_user, recommendations=recommendations)
+    return render_template('saved_recommendations.html', user=current_user, recommendations=recommendations, profile=profile)
+
+
+
+@app.route('/toggle-darkmode', methods=['GET', 'POST'])
+@catch_errors
+def toggle_darkmode():
+    if request.method == 'POST':
+        data = request.get_json()
+        user_profile = UserProfile.query.filter_by(user_id=current_user.id).first()
+        darkmode = data.get("darkmode", False)
+        user_profile.update(darkmode=darkmode)
+
+        return {}, 200
+
+
 
 @app.route('/login', methods=['GET', 'POST'])
 @catch_errors

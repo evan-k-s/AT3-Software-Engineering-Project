@@ -7,7 +7,7 @@
 
         <title>Book Reviewing Site</title>
     </head>
-    <body>
+    <body class="{% if profile.darkmode %}darkmode{% endif %}">
         <div class="navbar">
             <ul>
                 <li><h3>Navigation Bar</h3></li>
@@ -59,7 +59,7 @@
             await handleTokens(session_token, csrf_token, user);
         </script>
         <script type="module" src="{{ url_for('static', filename='src/services/review.js') }}" defer></script>
-        <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
         <script type="module" src="{{ url_for('static', filename='src/services/logout.js') }}" defer></script>
         
     </body>
