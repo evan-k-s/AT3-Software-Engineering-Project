@@ -48,72 +48,47 @@
 
             <div class="profile-dash">
                 <h2>About {{ user.username }}</h2>
+                {% if profile %}
                 <div class="fav-genre">
                     <p class="dash-title">Favourite Genres: </p>
-                    <div class="tag"><p>Genre 1</p></div>
-                    <div class="tag"><p>Genre 2</p></div>
-                    <div class="tag"><p>Genre 3</p></div>
+                    {% if profile.liked_genres %}
+                    {% for genre in profile.liked_genres %}
+                    <div class="tag"><p>{{ genre }}</p></div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="dash-empty">No liked genres detected! Please write some more reviews.</p>
+                    {% endif %}
                 </div>
                 <div class="fav-era">
                     <p class="dash-title">Favourite Eras: </p>
-                    <div class="tag"><p>Early 1900s</p></div>
-                    <div class="tag"><p>Late 1800s</p></div>
+                    {% if profile.liked_eras %}
+                    {% for era in profile.liked_eras %}
+                    <div class="tag"><p>{{ era }}</p></div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="dash-empty">No liked eras detected! Please write some more reviews.</p>
+                    {% endif %}
                 </div>
+                {% endif %}
                 <div class="fav-author">
                     <p class="dash-title">Favourite Authors:</p>
-                    <div class="h-scroller">
-                        <div class="author-card">
-                            <p class="review-card-author">Author 1</p>
-                            <p>Books: </p>
-                            <ul>
-                                <li>Book 1</li>
-                                <li>Book 2</li>
-                            </ul>
-                        </div>
-                        <div class="author-card">
-                            <p class="review-card-author">Author 1</p>
-                            <p>Books: </p>
-                            <ul>
-                                <li>Book 1</li>
-                                <li>Book 2</li>
-                            </ul>
-                        </div>
-                        <div class="author-card">
-                            <p class="review-card-author">Author 1</p>
-                            <p>Books: </p>
-                            <ul>
-                                <li>Book 1</li>
-                                <li>Book 2</li>
-                            </ul>
-                        </div>
-                        <div class="author-card">
-                            <p class="review-card-author">Author 1</p>
-                            <p>Books: </p>
-                            <ul>
-                                <li>Book 1</li>
-                                <li>Book 2</li>
-                            </ul>
-                        </div>
+                    <div class="h-scroller" id="authorsContainer">
                     </div>
                 </div>
                 <div class="next-read">
                     <p class="dash-title">Next Read: </p>
                     <div class="v-scroller">
+                        {% if saved_recommendations %}
+                        {% for recommendation in saved_recommendations %}
                         <div class="next-read-card">
-                            <p class="review-card-author">Next Read Title</p>
-                            <img src="https://img.freepik.com/premium-vector/gold-ornament-dark-background-can-be-used-as-invitation-card-book-cover-vector-illustration_443748-881.jpg" alt="">
-                            <p class="next-read-author">Author</p>
+                            <p class="review-card-author">{{ recommendation.title }}</p>
+                            <img src="https://covers.openlibrary.org/b/olid/{{ recommendation.olid }}.jpg" alt="{{ recommendation.olid }}" alt="">
+                            <p class="next-read-author">{{ recommendation.author }}</p>
                         </div>
-                        <div class="next-read-card">
-                            <p class="review-card-author">Next Read Title</p>
-                            <img src="https://img.freepik.com/premium-vector/gold-ornament-dark-background-can-be-used-as-invitation-card-book-cover-vector-illustration_443748-881.jpg" alt="">
-                            <p class="next-read-author">Author</p>
-                        </div>
-                        <div class="next-read-card">
-                            <p class="review-card-author">Next Read Title</p>
-                            <img src="https://img.freepik.com/premium-vector/gold-ornament-dark-background-can-be-used-as-invitation-card-book-cover-vector-illustration_443748-881.jpg" alt="">
-                            <p class="next-read-author">Author</p>
-                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <p class="dash-empty">No saved recommendations! Please save some recommendations to display next read.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -126,6 +101,44 @@
             const csrf_token = "{{ request.cookies.get('csrf_token') }}";
             const user = "{{ current_user.username }}";
             await handleTokens(session_token, csrf_token, user);
+
+            const authorsContainer = document.getElementById('authorsContainer');
+
+            // Commented out to avoid errors appearing - STILL WORKS WITH COMMENTS
+            //{% if profile.liked_authors %}
+                //{% for author in profile.liked_authors %}
+                    const authorContent = document.createElement("div");
+                    const apiUrl = `https://openlibrary.org/search/authors.json?q=${encodeURIComponent('{{ author }}')}&limit=1`;
+                    const authorResponse = await fetch(apiUrl);
+                    if (!authorResponse.ok) {
+                        throw new Error("Failed to fetch data");
+                    }
+                    const data = await authorResponse.json();
+                    const authorResult = data.docs;
+                    const authorKey = authorResult[0].key;
+                    const worksURL = `https://openlibrary.org/authors/${authorKey}/works.json?limit=3`;
+                    const worksResponse = await fetch(worksURL);
+                    if (!worksResponse.ok) {
+                        throw new Error("Failed to fetch data");
+                    }
+                    const worksData = await worksResponse.json();
+                    const works = worksData.entries;
+
+                    console.log(works)
+
+                    const booksul = document.createElement('ul');
+                    works.forEach(work => {
+                        const bookli = document.createElement('li');
+                        bookli.textContent = work.title;
+                        booksul.appendChild(bookli);
+                    })
+                    authorContent.classList.add("author-card");
+                    authorContent.innerHTML = `<p class="fav-author-name">{{ author }}</p>
+                            <p>Some of their titles... </p>`;
+                    authorContent.appendChild(booksul);
+                    authorsContainer.appendChild(authorContent);
+                //{% endfor %}
+            //{% endif %}
         </script>
 
         <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>

@@ -169,6 +169,11 @@ a {
     font-style: italic;
 }
 
+.dash-empty {
+    font-size: 1.15rem;
+    font-style: italic;
+}
+
 .h-scroller {
     display: grid;
     gap: 2%;
@@ -248,6 +253,12 @@ a {
     grid-row: 3;
 }
 
+.fav-author-name {
+    font-style: italic;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
 .author-card {
     background-color: var(--secondary-background);
     border-radius: 20px;
@@ -257,6 +268,7 @@ a {
 
 .author-card ul {
     font-size: 0.75rem;
+    padding-left: 20px;
 }
 
 .next-read {

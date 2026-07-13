@@ -91,7 +91,9 @@ def flask_middle_auth():
 @login_required
 def dashboard():
     reviews = current_user.reviews
-    return render_template('index.html', user=current_user, reviews=reviews)
+    profile = current_user.details
+    saved_recommendations = current_user.saved_recommendations
+    return render_template('index.html', user=current_user, reviews=reviews, profile=profile, saved_recommendations=saved_recommendations)
 
 
 @app.route('/reviews')
