@@ -7,7 +7,7 @@
 
         <title>Book Reviewing Site</title>
     </head>
-    <body>
+    <body class="{% if profile.darkmode %}darkmode{% endif %}">
         <div class="navbar">
             <ul>
                 <li><h3>Navigation Bar</h3></li>
@@ -126,7 +126,7 @@
             })
         </script>
         <script type="module" src="{{ url_for('static', filename='filters.js') }}" defer></script>
-        <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
         <script type="module" src="{{ url_for('static', filename='src/services/logout.js') }}" defer></script>
         <script type="module" src="{{ url_for('static', filename='src/services/recommendation.js') }}" defer></script>
 
