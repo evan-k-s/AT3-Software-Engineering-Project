@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+    {% extends "base.html" %}
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -8,6 +9,7 @@
         <title>Book Reviewing Site</title>
     </head>
     <body class="{% if profile.darkmode %}darkmode{% endif %}">
+        {% block content %}
         <div class="navbar">
             <ul>
                 <li><h3>Navigation Bar</h3></li>
@@ -144,5 +146,6 @@
         <script type="module" src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
         <script type="module" src="{{ url_for('static', filename='src/services/logout.js') }}" defer></script>
         
+        {% endblock %}
     </body>
 </html>
