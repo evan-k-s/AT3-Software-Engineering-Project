@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash, send_from_directory
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -380,6 +380,16 @@ def logout():
     auth_logout_user(current_user.session_token)
     logout_user()
     return {}, 200
+
+
+@app.route('/service-worker.js')
+def service_worker():
+    return send_from_directory(TEMPLATE_DIR, 'service-worker.js')
+
+
+@app.route('/manifest.json')
+def manifest():
+    return send_from_directory(TEMPLATE_DIR, 'manifest.json')
 
 
 @login_manager.user_loader
