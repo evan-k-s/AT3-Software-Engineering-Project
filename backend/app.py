@@ -4,10 +4,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from openai import OpenAI
 from dotenv import load_dotenv
+from datetime import datetime, time
 from database.data import db, User, Review, UserProfile, RecentRecommendation
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
-from services.review import user_create_review, user_delete_review, user_edit_review
+from services.review import user_create_review, user_delete_review, user_edit_review, find_review_activity
 from services.recommendations import client, find_user_preferences, find_book_recommendations, store_recent_recommendations, user_save_recommendation, user_delete_recommendation
 from decorators.error import catch_errors
 from core.auth_core import authorise_user
@@ -93,7 +94,10 @@ def dashboard():
     reviews = current_user.reviews
     profile = current_user.details
     saved_recommendations = current_user.saved_recommendations
-    return render_template('index.html', user=current_user, reviews=reviews, profile=profile, saved_recommendations=saved_recommendations)
+
+    activity_data = find_review_activity(current_user.id)
+
+    return render_template('index.html', user=current_user, reviews=reviews, profile=profile, saved_recommendations=saved_recommendations, activity_data=activity_data)
 
 
 @app.route('/reviews')
@@ -103,6 +107,23 @@ def reviews():
     reviews = current_user.reviews
     profile = current_user.details
     return render_template('reviews.html', user=current_user, reviews=reviews, profile=profile)
+
+
+@app.route('/review_activity/<date>')
+@catch_errors
+@login_required
+def review_activity(date):
+    date_obj = datetime.strptime(date, "%Y-%m-%d")
+
+    start_day = datetime.combine(date_obj, time.min)
+    end_day = datetime.combine(date_obj, time.max)
+
+    reviews = Review.query.filter(Review.user_id == current_user.id, Review.created_at.between(start_day, end_day)).all()
+
+    profile = current_user.details
+
+    return render_template('review_activity.html', date=date, reviews=reviews, profile=profile)
+
 
 @app.route('/create-review', methods=['GET', 'POST'])
 @catch_errors
