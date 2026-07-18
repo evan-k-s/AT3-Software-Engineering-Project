@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from database.data import db, User, Review, UserProfile, RecentRecommendation
 from classes.Error import AccessError, InputError
 from services.auth import auth_login_user, auth_register_user, auth_logout_user
-from services.review import user_create_review, user_delete_review, user_edit_review
+from services.review import user_create_review, user_delete_review, user_edit_review, find_review_activity
 from services.recommendations import client, find_user_preferences, find_book_recommendations, store_recent_recommendations, user_save_recommendation, user_delete_recommendation
 from decorators.error import catch_errors
 from core.auth_core import authorise_user
@@ -93,7 +93,12 @@ def dashboard():
     reviews = current_user.reviews
     profile = current_user.details
     saved_recommendations = current_user.saved_recommendations
-    return render_template('index.html', user=current_user, reviews=reviews, profile=profile, saved_recommendations=saved_recommendations)
+
+    activity_data = find_review_activity(current_user.id)
+
+    print(activity_data)
+
+    return render_template('index.html', user=current_user, reviews=reviews, profile=profile, saved_recommendations=saved_recommendations, activity_data=activity_data)
 
 
 @app.route('/reviews')
