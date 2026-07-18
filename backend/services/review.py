@@ -53,3 +53,21 @@ def find_review_activity(user_id):
 
     heatmap_data = []
 
+    for i in range(365):
+        current_date = start_date + timedelta(days=i)
+        day = current_date.strftime("%d/%m/%Y")
+        activity = activity_dict.get(day, 0)
+
+        level = 0
+        if activity > 0:
+            level = 1
+        if activity > 2:
+            level = 2
+        if activity > 5:
+            level = 3
+        if activity > 8:
+            level = 4
+        
+        heatmap_data.append({'date': day, 'activity': activity, 'level': level})
+    
+    return heatmap_data
