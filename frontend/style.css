@@ -310,6 +310,11 @@ a {
     gap: 2px;
 }
 
+.heatmap-grid a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .heatmap-square {
     width: 10px;
     height: 10px;
