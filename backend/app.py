@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_admin import Admin, AdminIndexView, expose
+from flask_admin.contrib.sqla import ModelView
+from flask_admin.menu import MenuLink
 from openai import OpenAI
 from dotenv import load_dotenv
 from datetime import datetime, time
@@ -45,6 +48,45 @@ login_manager.login_view = 'login'
 
 login_manager.login_message = "Please log in!"
 login_manager.login_message_category = "info"
+
+
+class MyAdminIndexView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        return self.render('admin.html', views=self.admin._views)
+
+    def is_accessible(self):
+        return current_user.is_admin
+    
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('dashboard'))
+
+class UserModelView(ModelView):
+    column_list = ('username', 'email', 'created_at', 'is_admin')
+    form_columns = ('username', 'email', 'is_admin')
+    can_create = False
+
+    def is_accessible(self):
+        return current_user.is_admin
+    
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('dashboard'))
+
+class ReviewModelView(ModelView):
+    column_list = ('user', 'title', 'author', 'rating', 'created_at')
+    form_columns = ('user', 'rating', 'review_body')
+    can_create = False
+
+    def is_accessible(self):
+        return current_user.is_admin
+    
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('dashboard'))
+
+admin = Admin(app, index_view=MyAdminIndexView())
+admin.add_view(UserModelView(User, db, name='Users'))
+admin.add_view(ReviewModelView(Review, db, name='Reviews'))
+admin.add_link(MenuLink('Back to Home', '/'))
 
 
 first_request = True
@@ -240,9 +282,9 @@ def recommendations():
     authors = [row.author for row in authors_details]
 
     oldest = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).order_by(RecentRecommendation.published.asc()).first()
-    oldest_pub = oldest.published
+    oldest_pub = oldest.published if oldest is not None else None
     newest = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).order_by(RecentRecommendation.published.desc()).first()
-    newest_pub = newest.published
+    newest_pub = newest.published if newest is not None else None
 
     profile = current_user.details
 

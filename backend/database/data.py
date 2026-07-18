@@ -18,12 +18,13 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     session_token = db.Column(db.String(50), nullable=False)
     csrf_token = db.Column(db.String(50), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
     reviews = db.relationship('Review', backref='user')
     recent_recommendations = db.relationship('RecentRecommendation', backref='user')
     saved_recommendations = db.relationship('SavedRecommendation', backref='user')
     details = db.relationship('UserProfile', backref='user', uselist=False)
     
-    def __init__(self, username, email, created_at, password=None, password_hash=None, session_token=None, csrf_token=None, **kwargs):
+    def __init__(self, username, email, created_at, password=None, password_hash=None, session_token=None, csrf_token=None, is_admin=False, **kwargs):
         
         super(User, self).__init__(**kwargs)
 
@@ -40,6 +41,8 @@ class User(UserMixin, db.Model):
         
         self.session_token = session_token
         self.csrf_token = csrf_token
+
+        self.is_admin = is_admin
 
     
     def __repr__(self):
@@ -84,7 +87,8 @@ class User(UserMixin, db.Model):
             "created_at": self.created_at.isoformat(),
             "password_hash": self.password_hash,
             "session_token": self.session_token,
-            "csrf_token": self.csrf_token
+            "csrf_token": self.csrf_token,
+            "is_admin": self.is_admin
         }
     
     @classmethod
@@ -95,7 +99,8 @@ class User(UserMixin, db.Model):
             password_hash=data["password_hash"],
             created_at=data["created_at"],
             session_token=data.get("session_token"),
-            csrf_token=data.get("csrf_token")
+            csrf_token=data.get("csrf_token"),
+            is_admin=data.get("is_admin")
         )
 
 
