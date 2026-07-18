@@ -96,7 +96,9 @@ def dashboard():
 
     activity_data = find_review_activity(current_user.id)
 
-    return render_template('index.html', user=current_user, reviews=reviews, profile=profile, saved_recommendations=saved_recommendations)
+    print(activity_data)
+
+    return render_template('index.html', user=current_user, reviews=reviews, profile=profile, saved_recommendations=saved_recommendations, activity_data=activity_data)
 
 
 @app.route('/reviews')

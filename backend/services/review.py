@@ -55,7 +55,7 @@ def find_review_activity(user_id):
 
     for i in range(365):
         current_date = start_date + timedelta(days=i)
-        day = current_date.strftime("%d/%m/%Y")
+        day = current_date.strftime("%Y-%m-%d")
         activity = activity_dict.get(day, 0)
 
         level = 0
