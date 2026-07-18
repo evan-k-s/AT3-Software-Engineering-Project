@@ -333,6 +333,19 @@ a {
     background-color: rgba(var(--heatmap-square), 0.95);
 }
 
+.heatmap-square:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    margin-top: 15px;
+    transform: translate(-50%);
+    background-color: var(--background-colour);
+    border: 1px solid var(--accent-colour);
+    padding: 4px 8px;
+    font-size: 11px;
+    border-radius: 3px;
+    white-space: nowrap;
+    z-index: 1;
+}
 
 
 
