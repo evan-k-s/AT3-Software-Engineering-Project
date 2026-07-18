@@ -1,0 +1,16 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+    <h1>Welcome to Admin Dashboard</h1>
+    <div class="row">
+        {% for view in views %}
+        {% if view.endpoint != 'admin' %}
+            <div class="col-md-4">
+                <a href="{{ admin_view.get_url(view.endpoint + '.index_view') }}" class="btn btn-primary btn-lg btn-block">
+                    <span class="glyphicon glyphicon-list"></span>{{ view.name }}
+                </a>
+            </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
