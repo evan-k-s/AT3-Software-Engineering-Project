@@ -16,6 +16,9 @@
                 <li><a class="active" href="{{ url_for('reviews') }}">My Reviews</a></li>
                 <li><a href="{{ url_for('recommendations') }}">Book Recommendations</a></li>
                 <li><a href="{{ url_for('saved_recommendations') }}">Saved Recommendations</a></li>
+                {% if user.is_admin %}
+                    <li><a class="admin-button" href="{{ url_for('admin.index') }}">Admin View</a></li>
+                {% endif %}
                 <li><a class="logout-button" href="#" id="logout">Logout</a></li>
             </ul>
         </div>

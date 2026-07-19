@@ -93,6 +93,15 @@ body {
     text-transform: uppercase;
 }
 
+.navbar .admin-button {
+    color: var(--primary-text);
+    border: 1px solid var(--primary-text);
+    border-radius: 5px;
+    margin: 10px;
+    font-style: normal;
+    text-transform: uppercase;
+}
+
 .navbar .back-button {
     color: var(--primary-text);
     border: 1px solid var(--accent-colour);
@@ -304,9 +313,9 @@ a {
 
 .heatmap-grid {
     display: grid;
-    grid-template-rows: repeat(7, 10px);
+    grid-template-rows: repeat(7, 15px);
     grid-auto-flow: column;
-    grid-auto-columns: 10px;
+    grid-auto-columns: 15px;
     gap: 2px;
 }
 
@@ -316,8 +325,8 @@ a {
 }
 
 .heatmap-square {
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
     border-radius: 2px;
     background-color: rgba(var(--heatmap-square), 0.2);
 }
