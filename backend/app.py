@@ -278,6 +278,11 @@ def recommendations():
     
     recommendations = current_user.recent_recommendations
 
+    if len(recommendations) > 0:
+        existing = True
+    else:
+        existing = False
+
     authors_details = RecentRecommendation.query.with_entities(RecentRecommendation.author).filter_by(user_id=current_user.id).distinct().all()
     authors = [row.author for row in authors_details]
 
@@ -288,7 +293,7 @@ def recommendations():
 
     profile = current_user.details
 
-    return render_template('recommendations.html', user=current_user, recommendations=recommendations, profile=profile, authors=authors, oldest=oldest_pub, newest=newest_pub, min=oldest_pub, max=newest_pub)
+    return render_template('recommendations.html', user=current_user, recommendations=recommendations, profile=profile, authors=authors, oldest=oldest_pub, newest=newest_pub, min=oldest_pub, max=newest_pub, existing=existing)
 
 
 @app.route('/recommendations/filter/<authors>/<min_era>/<max_era>', methods=['GET', 'POST'])
@@ -312,7 +317,7 @@ def filter_recommendations(authors, min_era, max_era):
 
     profile = current_user.details
 
-    return render_template('recommendations.html', user=current_user, recommendations=recommendations, profile=profile, authors=all_authors, oldest=oldest_pub, newest=newest_pub, min=min_era, max=max_era)
+    return render_template('recommendations.html', user=current_user, recommendations=recommendations, profile=profile, authors=all_authors, oldest=oldest_pub, newest=newest_pub, min=min_era, max=max_era, existing=True)
 
 
 @app.route('/save-recommendation', methods=['GET', 'POST'])
