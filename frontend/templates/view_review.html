@@ -51,7 +51,7 @@
             const user = "{{ current_user.username }}";
             await handleTokens(session_token, csrf_token, user);
         </script>
-        <script type="module" src="{{ url_for('static', filename='src/services/review.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='services/review.js') }}" defer></script>
         <script type="module" src="{{ url_for('static', filename='scripts/navbar.js') }}" defer></script>
         <script type="module" src="{{ url_for('static', filename='scripts/darkmode.js') }}" defer></script>
         

@@ -75,7 +75,7 @@
         </div>
 
         <script type="module">
-            import { requestBackend } from "{{ url_for('static', filename='src/services/api.js') }}";
+            import { requestBackend } from "{{ url_for('static', filename='services/api.js') }}";
 
             document.getElementById('reviewbody').value = "{{ review.review_body }}";
 
