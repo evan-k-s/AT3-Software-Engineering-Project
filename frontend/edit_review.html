@@ -25,7 +25,7 @@
             </button>
             <form class="review-form" id="edit-form" method="POST">
                 <div class="review-field">
-                    <p class="field-title" style="display: inline-block;">Book Search:</p>
+                    <p class="field-title" style="display: inline-block;">Book Details for this Review...</p>
                     <div class="tooltip">ⓘ
                         <span class="tooltip-text">You cannot edit the book that a review is tied to. If you
                             want to change the book, please create a new review with that book.
@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <p class="field-title">Star Rating:</p>
+                <p class="field-title">Your Rating of this Book...</p>
                 <div class="rating">
                     <input type="radio" id="star5" name="rating" value="5" {{ 'checked' if review.rating == 5 else '' }} required>
                     <label for="star5" title="5 stars">★</label>
@@ -62,14 +62,14 @@
                 </div>
 
                 <div class="review-field">
-                        <p class="field-title">Review Body:</p>
-                        <textarea class="paragraph-input" name="reviewbody" id="reviewbody" placeholder="Enter Review Body..." required></textarea>
+                        <p class="field-title">The Reason for this Rating...</p>
+                        <textarea class="paragraph-input" name="reviewbody" id="reviewbody" placeholder="I really liked/disliked this books because..." required></textarea>
                 </div>
 
                 <a href="{{ url_for('reviews') }}">
-                    <button class="cancel-button" type="button">Cancel Edit</button>
+                    <button class="cancel-button" type="button">Cancel Changes</button>
                 </a>
-                <button class="dash-button" type="submit">Edit Review</button>
+                <button class="dash-button" type="submit">Save Changes</button>
                 
             </form>
         </div>

@@ -25,7 +25,7 @@
             </button>
             <form class="review-form" id="review-form" method="POST">
                 <div class="review-field">
-                    <p class="field-title" style="display: inline-block;">Book Search:</p>
+                    <p class="field-title" style="display: inline-block;">Search for Your Book...</p>
                     <div class="tooltip">ⓘ
                         <span class="tooltip-text">Enter a book below to search in the search bar.
                             After searching, select a book to review so that the title,
@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                <p class="field-title">Star Rating:</p>
+                <p class="field-title">Your Rating of this Book...</p>
                 <div class="rating">
                     <input type="radio" id="star5" name="rating" value="5" required>
                     <label for="star5" title="5 stars">★</label>
@@ -66,8 +66,8 @@
                 </div>
 
                 <div class="review-field">
-                        <p class="field-title">Review Body:</p>
-                        <textarea class="paragraph-input" name="reviewbody" placeholder="Enter Review Body..." required></textarea>
+                        <p class="field-title">The Reason for this Rating...</p>
+                        <textarea class="paragraph-input" name="reviewbody" placeholder="I really liked/disliked this books because..." required></textarea>
                 </div>
 
                 <button class="dash-button" type="submit">Create Review</button>
@@ -86,7 +86,8 @@
                     let reviewBody = event.target.reviewbody.value;
 
                     if (title.trim().length == 0 || author.trim().length == 0 || olid.trim().length == 0) {
-                        alert("Missing Fields!")
+                        alert("Missing Fields!");
+                        return;
                     };
                     const tokens = {
                         sessionToken: sessionStorage.getItem("session_token"),
