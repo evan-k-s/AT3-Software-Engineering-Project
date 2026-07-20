@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
 
         <title>Book Reviewing Site</title>
     </head>
@@ -49,7 +49,7 @@
         </div>
 
         <script type="module">
-            import { authRegister } from "{{ url_for('static', filename='src/services/auth.js') }}";
+            import { authRegister } from "{{ url_for('static', filename='services/auth.js') }}";
 
             document.getElementById("register-form").addEventListener('submit', async function(event) {
                 event.preventDefault();
@@ -73,7 +73,7 @@
             })
         </script>
 
-        <script src="{{ url_for('static', filename='password_vis.js') }}" defer></script>
+        <script src="{{ url_for('static', filename='scripts/password_vis.js') }}" defer></script>
         
     </body>
 </html>

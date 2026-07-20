@@ -20,9 +20,10 @@ import os
 
 
 # Specify alternative location for templates
-TEMPLATE_DIR = os.path.abspath('../frontend')
+TEMPLATE_DIR = os.path.abspath('../frontend/templates')
+STATIC_DIR = os.path.abspath('../frontend/src')
 
-app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=TEMPLATE_DIR)
+app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 

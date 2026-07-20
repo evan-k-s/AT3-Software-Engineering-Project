@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
 
         <title>Book Reviewing Site</title>
     </head>
@@ -102,9 +102,9 @@
                 }
             });
         </script>
-        <script type="module" src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
-        <script type="module" src="{{ url_for('static', filename='navbar.js') }}" defer></script>
-        <script src="{{ url_for('static', filename='book_search.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='scripts/darkmode.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='scripts/navbar.js') }}" defer></script>
+        <script src="{{ url_for('static', filename='scripts/book_search.js') }}" defer></script>
         
     </body>
 </html>
