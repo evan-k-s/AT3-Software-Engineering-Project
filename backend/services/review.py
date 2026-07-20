@@ -38,8 +38,8 @@ def user_edit_review(user, id, olid, rating, review_body):
 
 
 def find_review_activity(user_id):
-    end_date = datetime.now()
-    start_date = end_date - timedelta(days=365)
+    end_date = datetime.now().replace(hour=23, minute=59, second=59, microsecond=999999)
+    start_date = end_date - timedelta(days=364)
 
     results = db.session.query(
         db.func.date(Review.created_at).label('review_date'),

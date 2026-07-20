@@ -164,7 +164,7 @@ def review_activity(date):
 
     profile = current_user.details
 
-    return render_template('review_activity.html', date=date, reviews=reviews, profile=profile)
+    return render_template('review_activity.html', user=current_user, date=date, reviews=reviews, profile=profile)
 
 
 @app.route('/create-review', methods=['GET', 'POST'])
