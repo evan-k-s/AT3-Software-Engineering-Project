@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from classes.Error import InputError, AccessError
 from database.data import db, Review, User
 from datetime import datetime, timedelta
+import html
 
 def user_create_review(user, title, author, olid, rating, review_body):
     if type(rating) != int:
@@ -14,7 +15,9 @@ def user_create_review(user, title, author, olid, rating, review_body):
     
     created_at = datetime.now()
 
-    new_review = Review(user, title, author, olid, rating, review_body, created_at)
+    sanitised_review_body = html.escape(review_body)
+
+    new_review = Review(user, title, author, olid, rating, sanitised_review_body, created_at)
 
     new_review.save_to_db()
 
@@ -33,8 +36,10 @@ def user_edit_review(user, id, olid, rating, review_body):
 
     if (rating == review.rating) and (review_body == review.review_body):
         raise InputError("You must edit the review to perform this action!")
+    
+    sanitised_review_body = html.escape(review_body)
 
-    review.update(rating=rating, review_body=review_body)
+    review.update(rating=rating, review_body=sanitised_review_body)
 
 
 def find_review_activity(user_id):
