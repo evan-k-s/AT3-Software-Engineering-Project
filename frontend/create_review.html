@@ -10,9 +10,11 @@
     <body class="{% if profile.darkmode %}darkmode{% endif %}">
         <div class="navbar">
             <ul>
-                <li><h3>Navigation Bar</h3></li>
-                <hr>
-                <li><a class="back-button" href="{{ url_for('reviews') }}" id="review">Back to Reviews</a></li>
+                <li><h3 onclick="displayNav()">Navigation Bar</h3></li>
+                <div id="navlist">
+                    <hr>
+                    <li><a class="back-button" href="{{ url_for('reviews') }}" id="review">Back to Reviews</a></li>
+                </div>
             </ul>
         </div>
         <div class="content">
@@ -100,6 +102,7 @@
             });
         </script>
         <script type="module" src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='navbar.js') }}" defer></script>
         <script src="{{ url_for('static', filename='book_search.js') }}" defer></script>
         
     </body>

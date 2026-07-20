@@ -33,7 +33,7 @@ body {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: 200px;
+    width: 100%;
     background-color: var(--secondary-background);
 }
 
@@ -44,6 +44,7 @@ body {
     letter-spacing: 0.2rem;
     font-weight: 550;
     transform: scaleY(1.2);
+    pointer-events: none;
 }
 
 .navbar li a {
@@ -967,4 +968,44 @@ input[type="range"]::-moz-slider-thumb {
 
 .pass-vis.visible svg:last-child {
     display: block;
+}
+
+
+
+@media only screen and (max-width: 750px) {
+    .navbar ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: var(--secondary-background);
+    }
+
+    .navbar li a {
+        color: var(--primary-text);
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: block;
+    }
+    
+    .navbar #navlist {
+        display: none;
+    }
+
+    .navbar {
+        position: relative;
+        overflow: hidden;
+        background-color: var(--secondary-background);
+    }
+
+    .navbar li h3 {
+        padding: 0;
+        margin-left: 20px;
+        font-family: Old London;
+        font-weight: 550;
+        pointer-events: all;
+    }
+
 }
