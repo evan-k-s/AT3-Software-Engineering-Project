@@ -33,7 +33,7 @@ body {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: 200px;
+    width: 100%;
     background-color: var(--secondary-background);
 }
 
@@ -44,6 +44,7 @@ body {
     letter-spacing: 0.2rem;
     font-weight: 550;
     transform: scaleY(1.2);
+    pointer-events: none;
 }
 
 .navbar li a {
@@ -228,10 +229,10 @@ a {
     border: 0.5px solid var(--secondary-accent);
     border-radius: 7.5px;
     color:var(--background-colour);
-    display:inline-block;
-    padding-left:16px;
-    padding-right:16px;
-    text-align:center;
+    display: inline-block;
+    padding-left: 16px;
+    padding-right: 16px;
+    text-align: center;
     line-height: 5%;
     height: 30px;
 }
@@ -239,11 +240,12 @@ a {
 .profile-dash {
     display: grid;
     grid-template-columns: 1fr 1fr 0.60fr;
-    grid-template-rows: 10px 0.5fr 1fr;
+    grid-template-rows: 10px 0.5fr 1fr 1fr;
     margin-top: 100px;
     margin-bottom: 100px;
     gap: 50px;
     height: 350px;
+    padding-bottom: 200px;
 }
 
 .profile-dash h2 {
@@ -306,9 +308,9 @@ a {
 /* Activity Heatmap Section */
 
 .heatmap-container {
-    position: relative;
     max-width: 100%;
-    padding-top: 50px;
+    grid-row: 4;
+    grid-column: 1 / span 3;
 }
 
 .heatmap-grid {
@@ -703,6 +705,7 @@ a {
 .genre-select.open .dropdown {
     display: block;
     padding: 10px;
+    z-index: 2;
 }
 
 .dropdown {
@@ -967,4 +970,166 @@ input[type="range"]::-moz-slider-thumb {
 
 .pass-vis.visible svg:last-child {
     display: block;
+}
+
+
+
+@media only screen and (max-width: 750px) {
+    .navbar ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: var(--secondary-background);
+    }
+
+    .navbar li a {
+        color: var(--primary-text);
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: block;
+    }
+    
+    .navbar #navlist {
+        display: none;
+    }
+
+    .navbar {
+        position: relative;
+        overflow: hidden;
+        background-color: var(--secondary-background);
+    }
+
+    .navbar li h3 {
+        padding: 0;
+        margin-left: 20px;
+        font-family: Old London;
+        font-weight: 550;
+        pointer-events: all;
+    }
+
+    .theme-switch {
+        height: 50px;
+        width: 50px;
+        padding: 0;
+        position: absolute;
+        border: 1px solid var(--accent-colour);
+        border-radius: 50%;
+        background-color: var(--secondary-background);
+        color: var(--accent-colour);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 10px;
+        right: 30px;
+    }
+
+    .content {
+        margin-left: 10px;
+        padding: 1px 20px;
+    }
+
+    .h-scroller {
+        display: grid;
+        gap: 2%;
+        grid-auto-flow: column;
+        grid-auto-columns: 75%;
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+    }
+
+    .profile-dash {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 10px 0.5fr 1fr 1fr 1fr;
+        margin-top: 100px;
+        margin-bottom: 100px;
+        gap: 50px;
+        height: 350px;
+    }
+
+    .next-read {
+        grid-row: 3;
+        grid-column: 1 / span 2;
+    }
+
+    .fav-author {
+        grid-column: 1 / span 2;
+        grid-row: 4;
+    }
+
+    .heatmap-container {
+        max-width: 100%;
+        grid-row: 5;
+        grid-column: 1 / span 2;
+    }
+
+    .heatmap-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 15px);
+        grid-auto-flow: row;
+        grid-auto-rows: 15px;
+        gap: 2px;
+    }
+
+    h1 {
+        font-family: Old London;
+        font-size: 1.85rem;
+        letter-spacing: 0.5rem;
+        font-weight: 550;
+        transform: scaleY(1.2);
+    }
+
+    .reviews-wrapper {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        margin: 5rem 0;
+        grid-gap: 2rem;
+    }
+
+    .search-button {
+        margin-bottom: 10px;
+    }
+
+    .book-search {
+        display: flex;
+        flex-direction: column;  
+    }
+
+    .book-search > * {
+        width: max-content;
+    }
+
+    .auth-form {
+        width: 80%;
+    }
+
+    .recs-filters {
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .era-select {
+        margin-left: 0;
+    }
+
+    .save-button {
+        width: 100%;
+    }
+
+    .recs-wrapper {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        margin: 5rem 0;
+        grid-gap: 2rem;
+    }
+
+    .tag {
+        height: auto;
+        line-height: normal;
+        margin: 5px;
+    }
 }

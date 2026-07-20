@@ -10,16 +10,18 @@
     <body class="{% if profile.darkmode %}darkmode{% endif %}">
         <div class="navbar">
             <ul>
-                <li><h3>Navigation Bar</h3></li>
-                <hr>
-                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-                <li><a href="{{ url_for('reviews') }}">My Reviews</a></li>
-                <li><a href="{{ url_for('recommendations') }}">Book Recommendations</a></li>
-                <li><a class="active" href="#">Saved Recommendations</a></li>
-                {% if user.is_admin %}
-                    <li><a class="admin-button" href="{{ url_for('admin.index') }}">Admin View</a></li>
-                {% endif %}
-                <li><a class="logout-button" href="#" id="logout">Logout</a></li>
+                <li><h3 onclick="displayNav()">Navigation Bar</h3></li>
+                <div id="navlist">
+                    <hr>
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('reviews') }}">My Reviews</a></li>
+                    <li><a href="{{ url_for('recommendations') }}">Book Recommendations</a></li>
+                    <li><a class="active" href="#">Saved Recommendations</a></li>
+                    {% if user.is_admin %}
+                        <li><a class="admin-button" href="{{ url_for('admin.index') }}">Admin View</a></li>
+                    {% endif %}
+                    <li><a class="logout-button" href="#" id="logout">Logout</a></li>
+                </div>
             </ul>
         </div>
         <div class="content">
@@ -58,6 +60,7 @@
         </script>
         <script type="module" src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
         <script type="module" src="{{ url_for('static', filename='src/services/logout.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='navbar.js') }}" defer></script>
         <script type="module" src="{{ url_for('static', filename='src/services/recommendation.js') }}" defer></script>
 
     </body>
