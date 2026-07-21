@@ -19,6 +19,29 @@ python3 --version
 
 If not installed, download from [python.org](https://www.python.org/downloads/) or use your system's package manager.
 
+
+### MySQL
+
+Ensure you have MySQL installed:
+```bash
+mysql --version
+```
+
+If not installed, follow the instuctions for your system from [dev.mysql.com](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/).
+
+Once installed start the server on your system using system settings (Mac) and verify it is running.
+
+```bash
+mysql -u root -p
+```
+
+Enter the password and create the database for this system called books-webapp-db and verify it has been successfully created
+
+```bash
+CREATE DATABASE books-webapp-db;
+SHOW DATABASES;
+```
+
 ---
 
 ## Manual Setup Guide
