@@ -3,16 +3,18 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
 
         <title>Book Reviewing Site</title>
     </head>
     <body class="{% if profile.darkmode %}darkmode{% endif %}">
         <div class="navbar">
             <ul>
-                <li><h3>Navigation Bar</h3></li>
-                <hr>
-                <li><a class="back-button" href="{{ url_for('reviews') }}" id="review">Back to Reviews</a></li>
+                <li><h3 onclick="displayNav()">Navigation Bar</h3></li>
+                <div id="navlist">
+                    <hr>
+                    <li><a class="back-button" href="{{ url_for('reviews') }}" id="review">Back to Reviews</a></li>
+                </div>
             </ul>
         </div>
         <div class="content">
@@ -42,15 +44,16 @@
         </div>
         
         <script type="module">
-            import { handleTokens } from "{{ url_for('static', filename='src/services/auth.js') }}";
+            import { handleTokens } from "{{ url_for('static', filename='services/auth.js') }}";
             
             const session_token = "{{ request.cookies.get('session_token') }}";
             const csrf_token = "{{ request.cookies.get('csrf_token') }}";
             const user = "{{ current_user.username }}";
             await handleTokens(session_token, csrf_token, user);
         </script>
-        <script type="module" src="{{ url_for('static', filename='src/services/review.js') }}" defer></script>
-        <script src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='services/review.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='scripts/navbar.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='scripts/darkmode.js') }}" defer></script>
         
     </body>
 </html>

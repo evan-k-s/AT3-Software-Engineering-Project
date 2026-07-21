@@ -3,16 +3,18 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
 
         <title>Book Reviewing Site</title>
     </head>
     <body class="{% if profile.darkmode %}darkmode{% endif %}">
         <div class="navbar">
             <ul>
-                <li><h3>Navigation Bar</h3></li>
-                <hr>
-                <li><a class="back-button" href="{{ url_for('reviews') }}" id="review">Back to Reviews</a></li>
+                <li><h3 onclick="displayNav()">Navigation Bar</h3></li>
+                <div id="navlist">
+                    <hr>
+                    <li><a class="back-button" href="{{ url_for('reviews') }}" id="review">Back to Reviews</a></li>
+                </div>
             </ul>
         </div>
         <div class="content">
@@ -23,7 +25,7 @@
             </button>
             <form class="review-form" id="edit-form" method="POST">
                 <div class="review-field">
-                    <p class="field-title" style="display: inline-block;">Book Search:</p>
+                    <p class="field-title" style="display: inline-block;">Book Details for this Review...</p>
                     <div class="tooltip">ⓘ
                         <span class="tooltip-text">You cannot edit the book that a review is tied to. If you
                             want to change the book, please create a new review with that book.
@@ -41,7 +43,7 @@
                     </div>
                 </div>
 
-                <p class="field-title">Star Rating:</p>
+                <p class="field-title">Your Rating of this Book...</p>
                 <div class="rating">
                     <input type="radio" id="star5" name="rating" value="5" {{ 'checked' if review.rating == 5 else '' }} required>
                     <label for="star5" title="5 stars">★</label>
@@ -60,20 +62,20 @@
                 </div>
 
                 <div class="review-field">
-                        <p class="field-title">Review Body:</p>
-                        <textarea class="paragraph-input" name="reviewbody" id="reviewbody" placeholder="Enter Review Body..." required></textarea>
+                        <p class="field-title">The Reason for this Rating...</p>
+                        <textarea class="paragraph-input" name="reviewbody" id="reviewbody" placeholder="I really liked/disliked this books because..." required></textarea>
                 </div>
 
                 <a href="{{ url_for('reviews') }}">
-                    <button class="cancel-button" type="button">Cancel Edit</button>
+                    <button class="cancel-button" type="button">Cancel Changes</button>
                 </a>
-                <button class="dash-button" type="submit">Edit Review</button>
+                <button class="dash-button" type="submit">Save Changes</button>
                 
             </form>
         </div>
 
         <script type="module">
-            import { requestBackend } from "{{ url_for('static', filename='src/services/api.js') }}";
+            import { requestBackend } from "{{ url_for('static', filename='services/api.js') }}";
 
             document.getElementById('reviewbody').value = "{{ review.review_body }}";
 
@@ -97,7 +99,8 @@
                 }
             });
         </script>
-        <script type="module" src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='scripts/darkmode.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='scripts/navbar.js') }}" defer></script>
         
     </body>
 </html>

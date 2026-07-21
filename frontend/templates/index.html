@@ -3,20 +3,25 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
 
         <title>Book Reviewing Site</title>
     </head>
     <body class="{% if profile.darkmode %}darkmode{% endif %}">
         <div class="navbar">
             <ul>
-                <li><h3>Navigation Bar</h3></li>
-                <hr>
-                <li><a class="active" href="#">Dashboard</a></li>
-                <li><a href="{{ url_for('reviews') }}">My Reviews</a></li>
-                <li><a href="{{ url_for('recommendations') }}">Book Recommendations</a></li>
-                <li><a href="{{ url_for('saved_recommendations') }}">Saved Recommendations</a></li>
-                <li><a class="logout-button" href="#" id="logout">Logout</a></li>
+                <li><h3 onclick="displayNav()">Navigation Bar</h3></li>
+                <div id="navlist">
+                    <hr>
+                    <li><a class="active" href="#">Dashboard</a></li>
+                    <li><a href="{{ url_for('reviews') }}">My Reviews</a></li>
+                    <li><a href="{{ url_for('recommendations') }}">Book Recommendations</a></li>
+                    <li><a href="{{ url_for('saved_recommendations') }}">Saved Recommendations</a></li>
+                    {% if user.is_admin %}
+                        <li><a class="admin-button" href="{{ url_for('admin.index') }}">Admin View</a></li>
+                    {% endif %}
+                    <li><a class="logout-button" href="#" id="logout">Logout</a></li>
+                </div>
             </ul>
         </div>
         <div class="content">
@@ -91,24 +96,24 @@
                         {% endif %}
                     </div>
                 </div>
-            </div>
-
-            <div class="heatmap-container">
-                <p class="dash-title">Review Activity</p>
-                <div class="heatmap-grid">
-                    {% if activity_data %}
-                    {% for day in activity_data %}
-                        <a href="{{ url_for('review_activity', date=day.date) }}"><div class="heatmap-square" data-level="{{ day.level }}" data-tooltip="{{ day.activity }} book reviews written on {{ day.date }}"></div></a>
-                    {% endfor %}
-                    {% else %}
-                    <p class="dash-empty">Error generating activity heatmap! Please try again later.</p>
-                    {% endif %}
+                <div class="heatmap-container">
+                    <p class="dash-title">Review Activity</p>
+                    <div class="heatmap-grid">
+                        {% if activity_data %}
+                        {% for day in activity_data %}
+                            <a href="{{ url_for('review_activity', date=day.date) }}"><div class="heatmap-square" data-level="{{ day.level }}" data-tooltip="{{ day.activity }} book reviews written on {{ day.date }}"></div></a>
+                        {% endfor %}
+                        {% else %}
+                        <p class="dash-empty">Error generating activity heatmap! Please try again later.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
 
         <script type="module">
-            import { handleTokens } from "{{ url_for('static', filename='src/services/auth.js') }}";
+            import { handleTokens } from "{{ url_for('static', filename='services/auth.js') }}";
+            import { displayAuthors } from "{{ url_for('static', filename='scripts/profile.js') }}"
             
             const session_token = "{{ request.cookies.get('session_token') }}";
             const csrf_token = "{{ request.cookies.get('csrf_token') }}";
@@ -120,42 +125,20 @@
             // Commented out to avoid errors appearing - STILL WORKS WITH COMMENTS
             //{% if profile.liked_authors %}
                 //{% for author in profile.liked_authors %}
-                    const authorContent = document.createElement("div");
-                    const apiUrl = `https://openlibrary.org/search/authors.json?q=${encodeURIComponent('{{ author }}')}&limit=1`;
-                    const authorResponse = await fetch(apiUrl);
-                    if (!authorResponse.ok) {
-                        throw new Error("Failed to fetch data");
-                    }
-                    const data = await authorResponse.json();
-                    const authorResult = data.docs;
-                    const authorKey = authorResult[0].key;
-                    const worksURL = `https://openlibrary.org/authors/${authorKey}/works.json?limit=3`;
-                    const worksResponse = await fetch(worksURL);
-                    if (!worksResponse.ok) {
-                        throw new Error("Failed to fetch data");
-                    }
-                    const worksData = await worksResponse.json();
-                    const works = worksData.entries;
-
-                    console.log(works)
-
-                    const booksul = document.createElement('ul');
-                    works.forEach(work => {
-                        const bookli = document.createElement('li');
-                        bookli.textContent = work.title;
-                        booksul.appendChild(bookli);
-                    })
-                    authorContent.classList.add("author-card");
-                    authorContent.innerHTML = `<p class="fav-author-name">{{ author }}</p>
-                            <p>Some of their titles... </p>`;
-                    authorContent.appendChild(booksul);
+                    var authorContent = await displayAuthors("{{ author }}");
                     authorsContainer.appendChild(authorContent);
                 //{% endfor %}
+            //{% else %}
+            const noAuthors = document.createElement('p');
+            noAuthors.classList.add('dash-empty')
+            noAuthors.innerText = "No liked authors detected! Please write some more reviews."
+            authorsContainer.appendChild(noAuthors);
             //{% endif %}
         </script>
 
-        <script type="module" src="{{ url_for('static', filename='darkmode.js') }}" defer></script>
-        <script type="module" src="{{ url_for('static', filename='src/services/logout.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='scripts/darkmode.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='scripts/navbar.js') }}" defer></script>
+        <script type="module" src="{{ url_for('static', filename='services/logout.js') }}" defer></script>
         
     </body>
 </html>
