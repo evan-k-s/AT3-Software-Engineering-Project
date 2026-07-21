@@ -2,6 +2,7 @@ import { requestBackend } from "./api.js";
 
 
 window.deleteReview = async (review_id) => {
+    // Confirm deletion before execution
     const confirmation = confirm("Are you sure you want to delete this review?");
     if (confirmation) {
         try {

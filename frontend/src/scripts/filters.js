@@ -36,10 +36,12 @@ export function findFilters() {
     return params;
 }
 
+// Respond to genre selection click if exists
 genreSelect?.addEventListener('click', () => {
     genreSelect.classList.toggle('open');
 });
 
+// Respond to dropdown click if exists
 dropdown?.addEventListener('click', (e) => {
     const value = e.target.getAttribute('data-value');
     const label = e.target.textContent;
@@ -58,6 +60,7 @@ dropdown?.addEventListener('click', (e) => {
     }
 });
 
+// Respond to genre selection if exists
 selectedGenres?.addEventListener('click', (e) => {
     if (e.target.dataset.remove) {
         if (selectedValues.size == 1) {
@@ -71,6 +74,7 @@ selectedGenres?.addEventListener('click', (e) => {
     }
 })
 
+// Respond to document click if exists
 document?.addEventListener('click', (e) => {
     if (genreSelect !== null) {
         if (!genreSelect.contains(e.target)) {
@@ -80,7 +84,7 @@ document?.addEventListener('click', (e) => {
 })
 
 
-
+// Input for era slider to process filters
 rangeInput.forEach(input => {
     input.addEventListener("input", (e) => {
         let minVal = parseInt(rangeInput[0].value),
@@ -103,6 +107,7 @@ rangeInput.forEach(input => {
     });
 });
 
+// Input for era text fields to process filters
 eraInput.forEach(input => {
     input.addEventListener("input", (e) => {
         let minVal = parseInt(eraInput[0].value),

@@ -19,6 +19,7 @@ window.saveRecommendation = async (recommendation_id) => {
 };
 
 window.deleteRecommendation = async (recommendation_id) => {
+    // Confirm deletion before execution
     const confirmation = confirm("Are you sure you want to delete this saved recommendation?");
     if (confirmation) {
         try {
