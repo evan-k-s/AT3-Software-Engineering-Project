@@ -2,8 +2,11 @@ from flask_sqlalchemy import SQLAlchemy
 from classes.Error import InputError, AccessError
 from database.data import db, Review, User
 from datetime import datetime, timedelta
+import html
 
 def user_create_review(user, title, author, olid, rating, review_body):
+    """Service func - creates review belonging to current user"""
+
     if type(rating) != int:
         InputError("Invalid rating!")
     
@@ -14,18 +17,24 @@ def user_create_review(user, title, author, olid, rating, review_body):
     
     created_at = datetime.now()
 
-    new_review = Review(user, title, author, olid, rating, review_body, created_at)
+    sanitised_review_body = html.escape(review_body)
+
+    new_review = Review(user, title, author, olid, rating, sanitised_review_body, created_at)
 
     new_review.save_to_db()
 
 
 def user_delete_review(user, id):
+    """Service func - deletes selected review"""
+
     review = Review.query.filter_by(user_id=user.id, id=id).first()
     db.session.delete(review)
     db.session.commit()
 
 
 def user_edit_review(user, id, olid, rating, review_body):
+    """Service func - updates current review with edits"""
+
     if type(rating) != int:
         InputError("Invalid rating!")
     
@@ -33,13 +42,17 @@ def user_edit_review(user, id, olid, rating, review_body):
 
     if (rating == review.rating) and (review_body == review.review_body):
         raise InputError("You must edit the review to perform this action!")
+    
+    sanitised_review_body = html.escape(review_body)
 
-    review.update(rating=rating, review_body=review_body)
+    review.update(rating=rating, review_body=sanitised_review_body)
 
 
 def find_review_activity(user_id):
-    end_date = datetime.now()
-    start_date = end_date - timedelta(days=365)
+    """Service func - finds current user's past review activity"""
+
+    end_date = datetime.now().replace(hour=23, minute=59, second=59, microsecond=999999)
+    start_date = end_date - timedelta(days=364)
 
     results = db.session.query(
         db.func.date(Review.created_at).label('review_date'),

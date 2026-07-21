@@ -11,11 +11,19 @@ const rangeInput = document.querySelectorAll(".range-input input"),
 eraInput = document.querySelectorAll(".fields input"),
 progress = document.querySelector(".slider .progress");
 
-let era_min = rangeInput[0].value;
-let era_max = rangeInput[1].value;
+let era_min;
+let era_max;
 
-progress.style.left = ((era_min - rangeInput[0].min) / (rangeInput[0].max - rangeInput[0].min)) * 100 + "%";
-progress.style.right = 100 - ((era_max - rangeInput[1].min) / (rangeInput[1].max - rangeInput[1].min)) * 100 + "%";
+if (rangeInput[0] !== undefined) {
+    era_min = rangeInput[0].value;
+}
+if (rangeInput[1] !== undefined) {
+    era_max = rangeInput[1].value;
+}
+if (progress !== null) {
+    progress.style.left = ((era_min - rangeInput[0].min) / (rangeInput[0].max - rangeInput[0].min)) * 100 + "%";
+    progress.style.right = 100 - ((era_max - rangeInput[1].min) / (rangeInput[1].max - rangeInput[1].min)) * 100 + "%";
+}
 
 
 export function findFilters() {
@@ -28,11 +36,13 @@ export function findFilters() {
     return params;
 }
 
-genreSelect.addEventListener('click', () => {
+// Respond to genre selection click if exists
+genreSelect?.addEventListener('click', () => {
     genreSelect.classList.toggle('open');
 });
 
-dropdown.addEventListener('click', (e) => {
+// Respond to dropdown click if exists
+dropdown?.addEventListener('click', (e) => {
     const value = e.target.getAttribute('data-value');
     const label = e.target.textContent;
     
@@ -50,7 +60,8 @@ dropdown.addEventListener('click', (e) => {
     }
 });
 
-selectedGenres.addEventListener('click', (e) => {
+// Respond to genre selection if exists
+selectedGenres?.addEventListener('click', (e) => {
     if (e.target.dataset.remove) {
         if (selectedValues.size == 1) {
             const title = document.getElementById('dropdown-arrow');
@@ -63,14 +74,17 @@ selectedGenres.addEventListener('click', (e) => {
     }
 })
 
-document.addEventListener('click', (e) => {
-    if (!genreSelect.contains(e.target)) {
-        genreSelect.classList.remove('open');
+// Respond to document click if exists
+document?.addEventListener('click', (e) => {
+    if (genreSelect !== null) {
+        if (!genreSelect.contains(e.target)) {
+            genreSelect.classList.remove('open');
+        }
     }
 })
 
 
-
+// Input for era slider to process filters
 rangeInput.forEach(input => {
     input.addEventListener("input", (e) => {
         let minVal = parseInt(rangeInput[0].value),
@@ -93,6 +107,7 @@ rangeInput.forEach(input => {
     });
 });
 
+// Input for era text fields to process filters
 eraInput.forEach(input => {
     input.addEventListener("input", (e) => {
         let minVal = parseInt(eraInput[0].value),

@@ -1,4 +1,4 @@
-import { requestBackend } from "./src/services/api.js";
+import { requestBackend } from "../services/api.js";
 
 const themeSwitch = document.getElementById('theme-switch');
 

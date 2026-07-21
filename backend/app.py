@@ -20,9 +20,10 @@ import os
 
 
 # Specify alternative location for templates
-TEMPLATE_DIR = os.path.abspath('../frontend')
+TEMPLATE_DIR = os.path.abspath('../frontend/templates')
+STATIC_DIR = os.path.abspath('../frontend/src')
 
-app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=TEMPLATE_DIR)
+app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 
@@ -157,6 +158,7 @@ def reviews():
 def review_activity(date):
     date_obj = datetime.strptime(date, "%Y-%m-%d")
 
+    # Limit reviews by beginning to end of selected day
     start_day = datetime.combine(date_obj, time.min)
     end_day = datetime.combine(date_obj, time.max)
 
@@ -164,7 +166,7 @@ def review_activity(date):
 
     profile = current_user.details
 
-    return render_template('review_activity.html', date=date, reviews=reviews, profile=profile)
+    return render_template('review_activity.html', user=current_user, date=date, reviews=reviews, profile=profile)
 
 
 @app.route('/create-review', methods=['GET', 'POST'])
@@ -270,6 +272,7 @@ def recommendations():
 
         recs_num = store_recent_recommendations(books, current_user)
 
+        # Generate more reviews is query returned less than 12
         if recs_num < 12:
             books = find_book_recommendations(preferences, current_user, True, (12 - recs_num))
             final_num = store_recent_recommendations(books, current_user, True)
@@ -278,6 +281,12 @@ def recommendations():
     
     recommendations = current_user.recent_recommendations
 
+    if len(recommendations) > 0:
+        existing = True
+    else:
+        existing = False
+
+    # Configure filters to current recommendations
     authors_details = RecentRecommendation.query.with_entities(RecentRecommendation.author).filter_by(user_id=current_user.id).distinct().all()
     authors = [row.author for row in authors_details]
 
@@ -288,7 +297,7 @@ def recommendations():
 
     profile = current_user.details
 
-    return render_template('recommendations.html', user=current_user, recommendations=recommendations, profile=profile, authors=authors, oldest=oldest_pub, newest=newest_pub, min=oldest_pub, max=newest_pub)
+    return render_template('recommendations.html', user=current_user, recommendations=recommendations, profile=profile, authors=authors, oldest=oldest_pub, newest=newest_pub, min=oldest_pub, max=newest_pub, existing=existing)
 
 
 @app.route('/recommendations/filter/<authors>/<min_era>/<max_era>', methods=['GET', 'POST'])
@@ -302,6 +311,7 @@ def filter_recommendations(authors, min_era, max_era):
     else:
         recommendations = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).filter(RecentRecommendation.published >= min_era).filter(RecentRecommendation.published <= max_era).all()
     
+    # Configure filters to current recommendations
     authors_details = RecentRecommendation.query.with_entities(RecentRecommendation.author).filter_by(user_id=current_user.id).distinct().all()
     all_authors = [row.author for row in authors_details]
 
@@ -312,7 +322,7 @@ def filter_recommendations(authors, min_era, max_era):
 
     profile = current_user.details
 
-    return render_template('recommendations.html', user=current_user, recommendations=recommendations, profile=profile, authors=all_authors, oldest=oldest_pub, newest=newest_pub, min=min_era, max=max_era)
+    return render_template('recommendations.html', user=current_user, recommendations=recommendations, profile=profile, authors=all_authors, oldest=oldest_pub, newest=newest_pub, min=min_era, max=max_era, existing=True)
 
 
 @app.route('/save-recommendation', methods=['GET', 'POST'])
@@ -394,6 +404,7 @@ def login():
         if "username" in data and "password" in data:
             username = data["username"]
             password = data["password"]
+            # Check whether user would like to remember their credentials on their device
             remember = True if data.get("remember") else False
 
             session_token, csrf_token, user = auth_login_user(username, password)

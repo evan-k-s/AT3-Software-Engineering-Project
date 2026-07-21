@@ -30,6 +30,8 @@ class BookPreferences(BaseModel):
     disliked_eras: list[str]
 
 def find_user_preferences(reviews_text):
+    """Service func - analyses current user's reviews for preferences"""
+
     prompt = f"""Analyse the following set of a single user's book reviews and ratings. Extract their liked and 
     disliked: genres, authors, and eras (as in era of literature NOT era of the setting - the era should be returned 
     as a range i.e. 1950 TO 1960). Prioritise explicit preferences, but also look for implicit preferences within the 
@@ -59,6 +61,8 @@ def find_user_preferences(reviews_text):
 
 
 def find_book_recommendations(preferences, user, no_author=False, limit=12):
+    """Service func - query Open Library API with user preferences"""
+
     if (not preferences.liked_genres) and (not preferences.liked_authors) and (not preferences.liked_eras):
         raise AccessError("Preferences cannot be extracted! Please increase the detail of your review bodies.")
     
@@ -107,6 +111,8 @@ def find_book_recommendations(preferences, user, no_author=False, limit=12):
 
 
 def store_recent_recommendations(books, user, combine_recs=False):
+    """Service func - store generated recommendations in database"""
+
     has_recents = user.recent_recommendations is not None
 
     if has_recents and not combine_recs:
@@ -138,6 +144,8 @@ def store_recent_recommendations(books, user, combine_recs=False):
 
 
 def user_save_recommendation(recommendation_id, user):
+    """Service func - save selected recommendation"""
+
     recent_recommendation = RecentRecommendation.query.filter_by(id=recommendation_id).first()
 
     if recent_recommendation is not None:
@@ -158,6 +166,8 @@ def user_save_recommendation(recommendation_id, user):
 
 
 def user_delete_recommendation(user, id):
+    """Service func - delete selected saved recommendation"""
+
     recommendation = SavedRecommendation.query.filter_by(user_id=user.id, id=id).first()
     db.session.delete(recommendation)
     db.session.commit()

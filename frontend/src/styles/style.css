@@ -1,6 +1,6 @@
 @font-face {
   font-family: Old London;
-  src: url("assets/old-london/Old London.ttf");
+  src: url(../assets/old-london/OldLondon.ttf);
 }
 
 :root {
