@@ -158,6 +158,7 @@ def reviews():
 def review_activity(date):
     date_obj = datetime.strptime(date, "%Y-%m-%d")
 
+    # Limit reviews by beginning to end of selected day
     start_day = datetime.combine(date_obj, time.min)
     end_day = datetime.combine(date_obj, time.max)
 
@@ -271,6 +272,7 @@ def recommendations():
 
         recs_num = store_recent_recommendations(books, current_user)
 
+        # Generate more reviews is query returned less than 12
         if recs_num < 12:
             books = find_book_recommendations(preferences, current_user, True, (12 - recs_num))
             final_num = store_recent_recommendations(books, current_user, True)
@@ -284,6 +286,7 @@ def recommendations():
     else:
         existing = False
 
+    # Configure filters to current recommendations
     authors_details = RecentRecommendation.query.with_entities(RecentRecommendation.author).filter_by(user_id=current_user.id).distinct().all()
     authors = [row.author for row in authors_details]
 
@@ -308,6 +311,7 @@ def filter_recommendations(authors, min_era, max_era):
     else:
         recommendations = RecentRecommendation.query.join(RecentRecommendation.user).filter(User.id==current_user.id).filter(RecentRecommendation.published >= min_era).filter(RecentRecommendation.published <= max_era).all()
     
+    # Configure filters to current recommendations
     authors_details = RecentRecommendation.query.with_entities(RecentRecommendation.author).filter_by(user_id=current_user.id).distinct().all()
     all_authors = [row.author for row in authors_details]
 
@@ -400,6 +404,7 @@ def login():
         if "username" in data and "password" in data:
             username = data["username"]
             password = data["password"]
+            # Check whether user would like to remember their credentials on their device
             remember = True if data.get("remember") else False
 
             session_token, csrf_token, user = auth_login_user(username, password)

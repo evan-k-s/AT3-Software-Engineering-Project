@@ -6,6 +6,8 @@ import re
 import html
 
 def auth_login_user(username, password):
+    """Service func - registers new user"""
+
     user = User.query.filter_by(username=username).first()
 
     if not user or not user.verify_password(password):
@@ -17,6 +19,7 @@ def auth_login_user(username, password):
 
 
 def auth_register_user(username, email, password):
+    """Service func - logs in user if credentials valid"""
 
     email = str(email).strip()
     valid_email = bool(re.match("^([^.@ ]+(?:.[^.@ ]+)@[^.@ ]+\.[^.@ ]+[\.\w]+).{1,}$", email))
@@ -78,6 +81,8 @@ def auth_register_user(username, email, password):
     return session_token, csrf_token
 
 def auth_logout_user(session_token):
+    """Service func - logs out current user"""
+    
     user = User.query.filter_by(session_token=session_token).first()
 
     if user:

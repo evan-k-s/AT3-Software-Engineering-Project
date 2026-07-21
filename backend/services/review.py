@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 import html
 
 def user_create_review(user, title, author, olid, rating, review_body):
+    """Service func - creates review belonging to current user"""
+
     if type(rating) != int:
         InputError("Invalid rating!")
     
@@ -23,12 +25,16 @@ def user_create_review(user, title, author, olid, rating, review_body):
 
 
 def user_delete_review(user, id):
+    """Service func - deletes selected review"""
+
     review = Review.query.filter_by(user_id=user.id, id=id).first()
     db.session.delete(review)
     db.session.commit()
 
 
 def user_edit_review(user, id, olid, rating, review_body):
+    """Service func - updates current review with edits"""
+
     if type(rating) != int:
         InputError("Invalid rating!")
     
@@ -43,6 +49,8 @@ def user_edit_review(user, id, olid, rating, review_body):
 
 
 def find_review_activity(user_id):
+    """Service func - finds current user's past review activity"""
+
     end_date = datetime.now().replace(hour=23, minute=59, second=59, microsecond=999999)
     start_date = end_date - timedelta(days=364)
 
